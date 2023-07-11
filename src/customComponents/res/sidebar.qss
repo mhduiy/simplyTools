@@ -1,0 +1,39 @@
+QListWidget {
+    border: 0px;
+    background-color: transparent;
+    margin: 0;
+}
+
+QListWidget::item {
+    padding-left: 10px;
+    border: 1px 0px 1px 0px;
+    border-radius: 10px;
+    margin: 2px 2px 0px 0px;
+    outline-style: none;
+    height: 60px;
+    width: auto;
+}
+QListWidget:focus{
+    outline: 0px;
+}
+QListWidget::item:hover
+{
+    background:rgb(238, 238, 238);
+}
+
+QListWidget::item:selected
+{
+    border:0px none;
+    background:rgb(223, 223, 223);
+    color:rgb(22, 22, 22);
+}
+
+
+MSidebar {
+    background-color: #ffffff;
+    border: 1px #d2d2d2 solid;
+    border-left: 0px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    padding: 0px;
+}
