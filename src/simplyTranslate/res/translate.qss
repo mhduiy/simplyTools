@@ -1,0 +1,22 @@
+/**正常情况下样式**/
+QWidget
+{
+    font: 10pt "黑体";
+}
+
+QGroupBox{
+    border: 1px solid rgb(80,80,80);
+    border-radius:6px;
+    margin-top:12px; 
+}
+QGroupBox:title {
+    color:rgb(12, 131, 211);
+    subcontrol-origin: margin;
+    left: 10px;
+
+}
+
+QTextEdit {
+    background-color:transparent;
+    border: 0px;
+}

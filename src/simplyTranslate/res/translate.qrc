@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>translate.qss</file>
+    </qresource>
+</RCC>

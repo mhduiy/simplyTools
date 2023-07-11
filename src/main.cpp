@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 
     QLoggingCategory::defaultCategory()->setEnabled(QtDebugMsg, true);  //允许输出调试信息
 
-    w.resize(600,400);
+    w.resize(700,400);
 
     // 移动到中间位置
     QDesktopWidget *desktop=QApplication::desktop();

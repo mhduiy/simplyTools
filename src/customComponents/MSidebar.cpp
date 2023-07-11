@@ -55,7 +55,7 @@ void MSidebar::addWidgetItem(const QString &text, const QIcon& icon) {
 void MSidebar::foldPage() {
     cutX = this->pos().x();
     qDebug() << cutX;
-    if(cutX < 0) { //当前是折叠状态
+    if(cutX != 0) { //当前是折叠状态
         tarX = 0;
     }
     else {
@@ -87,5 +87,24 @@ void MSidebar::showEvent(QShowEvent *event) {
     QWidget::showEvent(event);
     if(isFirstShow) {
         foldBtn->move(this->pos().x() + this->width() - foldBtn->width(), (this->pos().y() + this->height() - foldBtn->height()) / 2 );
+        setCurrentIndex(0); //设置默认选择项
+        connect(listWidget, &QListWidget::currentRowChanged, this, &MSidebar::currentIndexChanged);
     }
+}
+
+void MSidebar::setCurrentIndex(int index) {
+    listWidget->setCurrentIndex(listWidget->model()->index(index, 0));
+}
+
+void MSidebar::resizeEvent(QResizeEvent *event) {
+    QWidget::resizeEvent(event);
+    foldBtn->move(this->pos().x() + this->width() - foldBtn->width(), (this->pos().y() + this->height() - foldBtn->height()) / 2 );
+}
+
+void MSidebar::enterEvent(QEvent *event) {
+    foldPage();
+}
+
+void MSidebar::leaveEvent(QEvent *event) {
+    foldPage();
 }

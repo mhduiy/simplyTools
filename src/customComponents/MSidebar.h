@@ -9,14 +9,23 @@
 #include <QListWidget>
 #include "MButton.h"
 #include <QTimer>
+#include <QMouseEvent>
 
 class MSidebar : public QWidget{
 Q_OBJECT
 public:
     explicit MSidebar(QWidget *parent = nullptr);
     void addWidgetItem(const QString &text, const QIcon& icon);
+    void setCurrentIndex(int index);
+
+signals:
+    void currentIndexChanged(int cutIndex);
+
 protected:
     void showEvent(QShowEvent *event)override;
+    void resizeEvent(QResizeEvent *event)override;
+    void enterEvent(QEvent *event) override;
+    void leaveEvent(QEvent *event) override;
 public slots:
     void foldPage();
 private:
