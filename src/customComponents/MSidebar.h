@@ -10,6 +10,7 @@
 #include "MButton.h"
 #include <QTimer>
 #include <QMouseEvent>
+#include <QPropertyAnimation>
 
 class MSidebar : public QWidget{
 Q_OBJECT
@@ -35,12 +36,13 @@ private:
     QListWidget *listWidget = nullptr;
     QPushButton *foldBtn = nullptr;
     QTimer animationTimer;
-    void moveWidget();
 
-    int cutX = 0;
-    int tarX = 0;
+    QPoint cutPos;
+    QPoint tarPos;
+
 
     bool isFirstShow = true;
+    QPropertyAnimation *m_animation;        //动画对象指针
 };
 
 #endif //SIMPLYTOOLS_MSIDEBAR_H

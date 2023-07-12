@@ -42,8 +42,11 @@ void MSidebar::initUI() {
     foldBtn->raise();   //置于顶层
     this->layout()->setMargin(5);
 
-    connect(&animationTimer, &QTimer::timeout, this, &MSidebar::moveWidget);
-//    connect(foldBtn, &QPushButton::clicked, this, &MSidebar::foldPage);
+    m_animation = new QPropertyAnimation();
+    m_animation->setTargetObject(this);
+    m_animation->setEasingCurve(QEasingCurve::OutCubic);
+    m_animation->setDuration(800);
+    m_animation->setPropertyName("pos");
 }
 
 void MSidebar::addWidgetItem(const QString &text, const QIcon& icon) {
@@ -53,36 +56,27 @@ void MSidebar::addWidgetItem(const QString &text, const QIcon& icon) {
 }
 
 void MSidebar::foldPage() {
-    cutX = this->pos().x();
-    if(cutX == -1 * this->width() + foldBtn->width()) { //当前是折叠状态
-        tarX = 0;  //设置为展开
+    cutPos = this->pos();
+    tarPos = cutPos;
+    if(cutPos.x() == -1 * this->width() + foldBtn->width()) { //当前是折叠状态
+        tarPos.setX(0);  //设置为展开
     }
-    else if(cutX == 0){ // 当前是展开状态
-        tarX = -1 * this->width() + foldBtn->width();
+    else if(cutPos.x() == 0){ // 当前是展开状态
+        tarPos.setX(-1 * this->width() + foldBtn->width());
     }
-    else {
+    else {  // 当前在动画中
         return;
     }
-    animationTimer.start(1);
-}
-
-void MSidebar::moveWidget() {
-    if(tarX == cutX) {
-        animationTimer.stop();
-        QIcon icon = foldBtn->icon();
-        QPixmap pixmap = icon.pixmap(64, 64);
-        QTransform transform;
-        transform.rotate(180);
-        pixmap = pixmap.transformed(transform);
-        foldBtn->setIcon(pixmap);
-    }
-    else if(cutX < tarX){
-        cutX += 1;
-    }
-    else {
-        cutX -= 1;
-    }
-    this->move(cutX, this->pos().y());
+    m_animation->setStartValue(cutPos);
+    m_animation->setEndValue(tarPos);
+    m_animation->start();   //开始动画
+    // 翻转图标
+    QIcon icon = foldBtn->icon();
+    QPixmap pixmap = icon.pixmap(64, 64);
+    QTransform transform;
+    transform.rotate(180);
+    pixmap = pixmap.transformed(transform);
+    foldBtn->setIcon(pixmap);
 }
 
 void MSidebar::showEvent(QShowEvent *event) {

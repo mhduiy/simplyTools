@@ -32,8 +32,6 @@ MainWindow::MainWindow(QWidget *parent)
         this->stackedWidget->setCurrentIndex(index);
     });
 
-    qDebug() << "show";
-
     statusBar()->hide();
     setCentralWidget(main);
     this->centralWidget()->layout()->setMargin(10);

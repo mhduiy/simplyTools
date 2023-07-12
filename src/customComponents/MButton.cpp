@@ -22,7 +22,6 @@ MButton::MButton(const QString &text, QWidget *parent) : QPushButton(text, paren
 
 void MButton::setCategory(Category category)
 {
-    qDebug() << category;
     this->category = category;
     setProperty("style", QVariant(category));
 
