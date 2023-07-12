@@ -50,10 +50,13 @@ void simplyTranslateWidget::initUI() {
     edLayout->addWidget(tranToBox);
 
     btnLayout->addWidget(tranOptionBtn);
-    btnLayout->addWidget(pasteBtn);
     btnLayout->addWidget(tranBtn);
     btnLayout->addWidget(clearBtn);
+    btnLayout->addWidget(pasteBtn);
     btnLayout->addWidget(copyBtn);
+
+    tranBtn->setCategory(MBtn_suggested);
+    clearBtn->setCategory(MBtn_warning);
 
     mainLayout->addLayout(edLayout);
     mainLayout->addLayout(btnLayout);

@@ -14,7 +14,8 @@ MainWindow::MainWindow(QWidget *parent)
     sidebar = new MSidebar(this);
     stackedWidget = new QStackedWidget();
 
-    mainLayout->addWidget(sidebar);
+    sidebar->move(0, 0);
+//    mainLayout->addWidget(sidebar);
     mainLayout->addWidget(stackedWidget);
 
     sidebar->addWidgetItem("simply翻译", QIcon(":/translate.png"));
@@ -22,8 +23,9 @@ MainWindow::MainWindow(QWidget *parent)
     sidebar->addWidgetItem("B站实时数据", QIcon(":/bilibiliData.png"));
 
     translateWidget = new simplyTranslateWidget();
+    simpyScreenShot = new SimpyScreenShot();
     stackedWidget->addWidget(translateWidget);
-    stackedWidget->addWidget(new QWidget);
+    stackedWidget->addWidget(simpyScreenShot);
     stackedWidget->addWidget(new QWidget);
 
     connect(sidebar, &MSidebar::currentIndexChanged, [this](int index){
@@ -32,7 +34,18 @@ MainWindow::MainWindow(QWidget *parent)
 
     statusBar()->hide();
     setCentralWidget(main);
-    this->centralWidget()->layout()->setMargin(0);
+    this->centralWidget()->layout()->setMargin(10);
+
+    sidebar->raise();  // 控件置顶
+}
+
+void MainWindow::showEvent(QShowEvent *event) {
+    QWidget::showEvent(event);
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event) {
+    QWidget::resizeEvent(event);
+    sidebar->setFixedHeight(this->geometry().height());
 }
 
 MainWindow::~MainWindow()

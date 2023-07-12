@@ -44,7 +44,7 @@ void TranslateTool::TranslateFromBaidu(QString src, QString from, QString to)
         QJsonValue locationValue = jsonObject.value(QStringLiteral("trans_result"));
         QJsonArray locationValueArray = locationValue.toArray();
 
-        if(locationValueArray.size()<=0)
+        if(locationValueArray.empty())
         {
             emit disMsgAppend("翻译错误:"+data);
             return;

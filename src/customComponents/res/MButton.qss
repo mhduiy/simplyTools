@@ -12,7 +12,7 @@ MButton[style='0']{
 
 }
 MButton[style='1']{
-    color: #2f3542;
+    color: #ffffff;
     background-color: rgb(64,158,255);
     border-color: rgb(204, 230, 255);
 }

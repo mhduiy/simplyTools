@@ -6,6 +6,7 @@
 #include "customComponents/MButton.h"
 #include "customComponents/MSidebar.h"
 #include "simplyTranslate/simplyTranslateWidget.h"
+#include "simplyScreenShot/simpyScreenShot.h"
 
 class MainWindow : public QMainWindow
 {
@@ -15,11 +16,16 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+protected:
+    void showEvent(QShowEvent *event)override;
+    void resizeEvent(QResizeEvent *event) override;
+
 private:
     MSidebar *sidebar = nullptr;
     QStackedWidget *stackedWidget = nullptr;
 
     simplyTranslateWidget *translateWidget = nullptr;
+    SimpyScreenShot *simpyScreenShot = nullptr;
 
 };
 #endif // MAINWINDOW_H
