@@ -47,7 +47,7 @@ void MSidebar::initUI() {
     m_animation = new QPropertyAnimation();
     m_animation->setTargetObject(this);
     m_animation->setEasingCurve(QEasingCurve::OutCubic);
-    m_animation->setDuration(800);
+    m_animation->setDuration(600);
     m_animation->setPropertyName("pos");
 }
 

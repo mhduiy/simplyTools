@@ -135,6 +135,7 @@ void SimpyScreenShot::colorPickerOperator() {
     showImageWidget->showMaximized();
     showColorBox->show();
     timer.start(3);
+    QGuiApplication::setOverrideCursor(Qt::CrossCursor);    //修改鼠标样式
 }
 
 void SimpyScreenShot::copyImageOperator() {
@@ -195,14 +196,14 @@ void SimpyScreenShot::showColorPicker() {
     int x = QCursor::pos().x();
     int y = QCursor::pos().y();
 
-    int tarX = x;
-    int tarY = y - showColorBox->height();
+    int tarX = x + 5;
+    int tarY = y - showColorBox->height() - 5;
 
     if(y - showColorBox->height() < 0) {    //超出上边界
-        tarY = y;
+        tarY = y + 5;
     }
     if(x + showColorBox->width() > QGuiApplication::primaryScreen()->geometry().width()) { //超出右边界
-        tarX = x - showColorBox->width();
+        tarX = x - showColorBox->width() - 5;
     }
     showColorBox->move(tarX, tarY);
 
@@ -254,6 +255,7 @@ void SimpyScreenShot::exitColorWidget() {
     colorDis->setAutoFillBackground(true);
     p.setColor(QPalette::Background, cutColor);
     colorDis->setPalette(p);
+    QGuiApplication::restoreOverrideCursor();  // 恢复鼠标样式
 }
 
 void SimpyScreenShot::showEvent(QShowEvent *event) {
