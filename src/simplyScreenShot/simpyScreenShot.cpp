@@ -13,6 +13,11 @@
 #include <QMessageBox>
 #include <QColor>
 #include <QRgb>
+#include <QFileDialog>
+#include <QDateTime>
+#include <QBuffer>
+#include <QDir>
+#include <QClipboard>
 
 SimpyScreenShot::SimpyScreenShot(QWidget *parent) : QWidget(parent){
     initUI();
@@ -37,7 +42,6 @@ void SimpyScreenShot::initUI() {
 
     colorDis->setStyleSheet("QLabel { border: 1px solid rgb(64,158,255); padding: 3px; }");
     colorDis->setFixedSize(36,36);
-    colorDis->setAutoFillBackground(true);
 
     auto *operatorLayout = new QGridLayout();
 
@@ -89,6 +93,8 @@ void SimpyScreenShot::colorPickerOperator() {
     // 截一个图， 全屏显示
     QScreen *screen = QGuiApplication::primaryScreen();
     pixmap = screen->grabWindow(0);
+
+    // 截图后显示以无边框窗口全屏显示
     if(showImageWidget == nullptr) {
         showImageWidget = new MFullWidget();
 
@@ -103,6 +109,7 @@ void SimpyScreenShot::colorPickerOperator() {
 
     }
 
+    // 显示颜色的小窗口
     if(showColorBox == nullptr) {
         showColorBox = new QWidget();
         showColorBox->setWindowFlag(Qt::FramelessWindowHint);
@@ -127,26 +134,78 @@ void SimpyScreenShot::colorPickerOperator() {
     showScreenImageLabel->setPixmap(pixmap);
     showImageWidget->showMaximized();
     showColorBox->show();
-    timer.start(10);
+    timer.start(3);
 }
 
 void SimpyScreenShot::copyImageOperator() {
-
+    if (pixmap.isNull()) {
+        QMessageBox::warning(this, "警告", "没截图也不能复制(●'◡'●)");
+        return;
+    }
+        QClipboard *clipboard = QGuiApplication::clipboard(); // 获取剪贴板对象
+        clipboard->setPixmap(pixmap); // 将图片复制到剪贴板
 }
 
 void SimpyScreenShot::saveImageOperator() {
+    if(pixmap.isNull()) {
+        QMessageBox::warning(this, "警告", "没截图怎么保存(●'◡'●)");
+        return;
+    }
+    QString &&saveDir = QFileDialog::getExistingDirectory(this, "选择保存路径");
+    QString &&fileName = QDateTime::currentDateTime().toString("MMddhhmm");
+    QString filePath = saveDir + "/" + fileName + ".png";
 
+    if(saveDir.isEmpty()) {
+        return;
+    }
+
+    QByteArray bytes;
+    QBuffer buffer(&bytes);
+    buffer.open(QIODevice::WriteOnly);
+    pixmap.save(&buffer, "PNG");
+
+    QFile file(filePath);
+    qDebug() << file.fileName();
+    file.open(QIODevice::WriteOnly);
+    bool ret = false;
+    if(file.isOpen()) {
+        ret = file.write(bytes);
+        file.flush();
+        file.close();
+    }
+
+    if(ret != 0) {
+        QMessageBox::information(this, "保存成功", "保存成功");
+    }
+    else {
+        QMessageBox::information(this, "保存失败", "保存失败");
+    }
 }
 
 void SimpyScreenShot::copyColorOperator() {
-
+    if(strHex.isEmpty()) {
+        QMessageBox::warning(this, "警告", "还没有取色哦`(*>﹏<*)′");
+        return;
+    }
+    QClipboard *clipboard = QGuiApplication::clipboard(); // 获取剪贴板对象
+    clipboard->setText(strHex);
 }
 
 void SimpyScreenShot::showColorPicker() {
     int x = QCursor::pos().x();
     int y = QCursor::pos().y();
 
-    showColorBox->move(x, y - showColorBox->height());
+    int tarX = x;
+    int tarY = y - showColorBox->height();
+
+    if(y - showColorBox->height() < 0) {    //超出上边界
+        tarY = y;
+    }
+    if(x + showColorBox->width() > QGuiApplication::primaryScreen()->geometry().width()) { //超出右边界
+        tarX = x - showColorBox->width();
+    }
+    showColorBox->move(tarX, tarY);
+
     posLabelInDialog->setText(QString("位置:(%1, %2)").arg(x).arg(y));
 
     QScreen *screen = qApp->primaryScreen();
@@ -165,7 +224,7 @@ void SimpyScreenShot::showColorPicker() {
         strHex = "#" + QString::number(cutColor.rgb(), 16).right(6).toUpper();
     }
 
-    colorLabelInDialog->setText(QString("rgb(%1)\nhex(%2)").arg(strDecimalValue, strHex));
+    colorLabelInDialog->setText(QString("%1\nhex(%2)").arg(strDecimalValue, strHex));
 }
 
 void SimpyScreenShot::mousePressEvent(QMouseEvent *event) {
@@ -199,6 +258,7 @@ void SimpyScreenShot::exitColorWidget() {
 
 void SimpyScreenShot::showEvent(QShowEvent *event) {
     QWidget::showEvent(event);
+    // 获取MainWindow对象， 实现隐藏显示
     if(mainWindow == nullptr) {
         QObject *obj = this->parent()->parent()->parent();
         if(strcmp(obj->metaObject()->className(), "MainWindow") == 0) {

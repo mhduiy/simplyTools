@@ -28,7 +28,7 @@ protected:
     void enterEvent(QEvent *event) override;
     void leaveEvent(QEvent *event) override;
 public slots:
-    void foldPage();
+    void foldPage(bool toFolded = true);
 private:
     // 初始化界面
     void initUI();
@@ -39,7 +39,7 @@ private:
 
     QPoint cutPos;
     QPoint tarPos;
-
+    QPixmap arrowIcon;
 
     bool isFirstShow = true;
     QPropertyAnimation *m_animation;        //动画对象指针

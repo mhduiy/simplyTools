@@ -18,18 +18,20 @@ void MSidebar::initUI() {
     setAttribute(Qt::WA_StyledBackground);
     auto *mainLayout = new QHBoxLayout(this);
 
+    arrowIcon.load(":/left-arrow.png");
+
     listWidget = new QListWidget();
     foldBtn = new QPushButton(this);
-    foldBtn->setIcon(QIcon(":/left-arrow.png"));
+    foldBtn->setIcon(arrowIcon.transformed(QTransform().rotate(180)));
     foldBtn->setFixedSize(20, 20);
     foldBtn->setIconSize(QSize(20, 20));
-    foldBtn->setStyleSheet("QPushButton{border: 0px; border-radius: 20px; margin: 0px; padding: 0px}  QPushButton:hover{background-color: #ececec;}");
+    foldBtn->setStyleSheet("QPushButton{border: 0px; border-radius: 20px; margin: 0px; padding: 0px}");
 
     setContentsMargins(0,0,0,0);
 
     mainLayout->setSpacing(0);
     mainLayout->addWidget(listWidget);
-//    mainLayout->addWidget(foldBtn);
+
     setFixedWidth(180);
 
     // 加载样式表
@@ -55,34 +57,35 @@ void MSidebar::addWidgetItem(const QString &text, const QIcon& icon) {
     this->listWidget->addItem(item);
 }
 
-void MSidebar::foldPage() {
+void MSidebar::foldPage(bool toFolded) {
     cutPos = this->pos();
     tarPos = cutPos;
-    if(cutPos.x() == -1 * this->width() + foldBtn->width()) { //当前是折叠状态
-        tarPos.setX(0);  //设置为展开
-    }
-    else if(cutPos.x() == 0){ // 当前是展开状态
+    if(toFolded) {
         tarPos.setX(-1 * this->width() + foldBtn->width());
     }
-    else {  // 当前在动画中
-        return;
+    else {
+        tarPos.setX(0);
     }
+
     m_animation->setStartValue(cutPos);
     m_animation->setEndValue(tarPos);
+    if(cutPos != tarPos) {  //动画还在进行中
+        m_animation->stop();
+    }
+    if(toFolded) {
+        foldBtn->setIcon(arrowIcon.transformed(QTransform().rotate(180)));
+    }
+    else {
+        foldBtn->setIcon(arrowIcon);
+    }
     m_animation->start();   //开始动画
-    // 翻转图标
-    QIcon icon = foldBtn->icon();
-    QPixmap pixmap = icon.pixmap(64, 64);
-    QTransform transform;
-    transform.rotate(180);
-    pixmap = pixmap.transformed(transform);
-    foldBtn->setIcon(pixmap);
 }
 
 void MSidebar::showEvent(QShowEvent *event) {
     QWidget::showEvent(event);
-    if(isFirstShow) {
-        foldBtn->move(this->pos().x() + this->width() - foldBtn->width(), (this->pos().y() + this->height() - foldBtn->height()) / 2 );
+    if (isFirstShow) {
+        foldBtn->move(this->pos().x() + this->width() - foldBtn->width(),
+                      (this->pos().y() + this->height() - foldBtn->height()) / 2);
         setCurrentIndex(0); //设置默认选择项
         connect(listWidget, &QListWidget::currentRowChanged, this, &MSidebar::currentIndexChanged);
         foldPage();
@@ -100,9 +103,9 @@ void MSidebar::resizeEvent(QResizeEvent *event) {
 }
 
 void MSidebar::enterEvent(QEvent *event) {
-    foldPage();
+    foldPage(false);
 }
 
 void MSidebar::leaveEvent(QEvent *event) {
-    foldPage();
+    foldPage(true);
 }
