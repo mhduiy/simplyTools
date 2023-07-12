@@ -9,6 +9,8 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPixmap>
+#include <QTimer>
+#include "MFullWidget.h"
 
 class SimpyScreenShot : public QWidget{
     Q_OBJECT
@@ -22,6 +24,11 @@ private:
     void copyImageOperator();
     void saveImageOperator();
     void copyColorOperator();
+    void showColorPicker();
+
+protected:
+    void mousePressEvent(QMouseEvent *event)override;
+    void showEvent(QShowEvent *event)override;
 
 private:
     QLabel *imageDisPlay = nullptr;         // 显示截图
@@ -33,7 +40,21 @@ private:
     QLineEdit *colorValue = nullptr;        // 显示颜色值
     MButton *copyColorValueBtn = nullptr;   // 复制颜色值
 
+    QString strDecimalValue, strHex;
+
+    void exitColorWidget();
+
     QPixmap pixmap;
+    QTimer timer;   //用于颜色实时获取
+
+    MFullWidget *showImageWidget = nullptr;
+    QLabel *showScreenImageLabel = nullptr;
+    QWidget *showColorBox = nullptr;
+    QLabel *colorLabelInDialog = nullptr;
+    QLabel *posLabelInDialog = nullptr;
+    QLabel *colorDisInDialog = nullptr;
+    QColor cutColor;    //当前选择的颜色
+    QWidget *mainWindow = nullptr;
 };
 
 
