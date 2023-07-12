@@ -7,6 +7,9 @@
 #include <QGroupBox>
 #include <QFile>
 #include <QDebug>
+#include <QGuiApplication>
+#include <QScreen>
+#include <QThread>
 
 SimpyScreenShot::SimpyScreenShot(QWidget *parent) : QWidget(parent){
     initUI();
@@ -65,7 +68,18 @@ void SimpyScreenShot::initUI() {
 }
 
 void SimpyScreenShot::screenShotOperator() {
-
+    QObject *obj = this->parent()->parent()->parent();
+    if(QString(obj->metaObject()->className()) == "MainWindow") {
+        qobject_cast<QWidget*>(obj)->hide();
+    }
+    QScreen *screen = QGuiApplication::primaryScreen();
+    pixmap = screen->grabWindow(0);
+    imageDisPlay->setScaledContents(true);   // 设置图片自动缩放
+    imageDisPlay->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);  // 设置大小策略
+    imageDisPlay->setPixmap(pixmap);
+    if(QString(obj->metaObject()->className()) == "MainWindow") {
+        qobject_cast<QWidget*>(obj)->show();
+    }
 }
 
 void SimpyScreenShot::colorPickerOperator() {
