@@ -6,5 +6,9 @@
         <file>screenShot.png</file>
         <file>bilibiliData.png</file>
         <file>left-arrow.png</file>
+        <file>closeIcon.png</file>
+        <file>successIcon.png</file>
+        <file>errorIcon.png</file>
+        <file>warningIcon.png</file>
     </qresource>
 </RCC>

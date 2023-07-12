@@ -4,13 +4,50 @@
 
 #ifndef SIMPLYTOOLS_MNOTIFICATIONBOX_H
 #define SIMPLYTOOLS_MNOTIFICATIONBOX_H
+#include <QWidget>
+#include <QLabel>
+#include "MButton.h"
+#include <QIcon>
+#include <QTimer>
+#include <QPropertyAnimation>
 
+class MNotificationWidget : public QWidget {
+    Q_OBJECT
+public:
+    explicit MNotificationWidget(QWidget *mainWindow);
+    ~MNotificationWidget() override;
+    void setContent(const QString &content, const QIcon& icon = QIcon());
 
+signals:
+    void closeBtnClicked();
 
-class MNotificationBox {
-
+private:
+    QLabel *contentLabel = nullptr;
+    QLabel *iconLabel = nullptr;
+    MButton *closeBtn = nullptr;
 };
 
+class MNotificationBox : public QObject{
+Q_OBJECT
+public:
+    explicit MNotificationBox(QWidget *cutWidget);
+    void sendMsg(const QString &content, const QIcon& icon = QIcon(), int duration = 2);
+    void closeMsgWidget();
+    void openMsgWidget();
+
+private:
+    // 寻找主窗口
+    QWidget* findMainWindow(QObject *obj);
+    int duration = 3;   //消息对话框持续时间
+    QWidget *mainWindow = nullptr;
+    MNotificationWidget *msgWidget = nullptr;
+    QPropertyAnimation *m_animation;        //动画对象指针;
+
+    QPoint cutPoint;
+    QPoint tarPoint;
+
+    QTimer timer;
+};
 
 
 #endif //SIMPLYTOOLS_MNOTIFICATIONBOX_H

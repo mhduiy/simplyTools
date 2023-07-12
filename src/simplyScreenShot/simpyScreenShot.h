@@ -11,6 +11,7 @@
 #include <QPixmap>
 #include <QTimer>
 #include "MFullWidget.h"
+#include "customComponents/MNotificationBox.h"
 
 class SimpyScreenShot : public QWidget{
     Q_OBJECT
@@ -55,6 +56,8 @@ private:
     QLabel *colorDisInDialog = nullptr;
     QColor cutColor;    //当前选择的颜色
     QWidget *mainWindow = nullptr;
+
+    MNotificationBox *mNotificationBox = nullptr;
 };
 
 

@@ -1,4 +1,4 @@
-#include "translatetool.h"
+#include "Translatetool.h"
 
 #include <QJsonArray>
 #include <QJsonDocument>

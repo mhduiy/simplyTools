@@ -61,6 +61,8 @@ void simplyTranslateWidget::initUI() {
     mainLayout->addLayout(edLayout);
     mainLayout->addLayout(btnLayout);
 
+//    mainWindow
+
     connect(tranOptionBtn, &MButton::clicked, this, &simplyTranslateWidget::on_btn_FormAndTo_clicked);
     connect(pasteBtn, &MButton::clicked, this, &simplyTranslateWidget::on_btn_paste_clicked);
     connect(tranBtn, &MButton::clicked, this, &simplyTranslateWidget::on_btn_tran_clicked);
@@ -86,10 +88,6 @@ void simplyTranslateWidget::initUI() {
                     QPair<QString,QString>{"zh","en"},
                     QPair<QString,QString>{"en","zh"}
             };
-//    foreach(auto it,*TranStyle)
-//    {
-//        ui->cb_FormAndTo->addItem(it);
-//    }
 
     qDebug() << QSslSocket::supportsSsl()
              << QSslSocket::sslLibraryBuildVersionString()
@@ -142,8 +140,13 @@ void simplyTranslateWidget::on_btn_clear_clicked() //清除
 
 void simplyTranslateWidget::on_btn_copy_clicked()  //复制
 {
+    if(ed_tranTo->toPlainText().isEmpty()) {
+        mNotificationBox->sendMsg("翻译结果为空", QIcon(":/warningIcon.png"));
+        return;
+    }
     QClipboard *clipboard = QGuiApplication::clipboard();
     clipboard->setText(ed_tranTo->toPlainText());
+    mNotificationBox->sendMsg("翻译结果成功复制到剪切板", QIcon(":/successIcon.png"));
 }
 
 
@@ -156,5 +159,12 @@ void simplyTranslateWidget::on_btn_FormAndTo_clicked()
     else {
         tranOptionBtn->setText(TranStyle->value(0));
         isZHToeEN = true;
+    }
+}
+
+void simplyTranslateWidget::showEvent(QShowEvent *event) {
+    QWidget::showEvent(event);
+    if(mNotificationBox == nullptr) {
+        mNotificationBox = new MNotificationBox(this);
     }
 }

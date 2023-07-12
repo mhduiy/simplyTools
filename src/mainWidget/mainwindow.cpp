@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     setWindowFlags(this->windowFlags() | Qt::WindowStaysOnTopHint);    //设置窗口置顶
 
-    setWindowOpacity(0.9);
+    setWindowOpacity(0.95);
 
     auto *main = new QWidget;
     QLayout *mainLayout = new QHBoxLayout(main);

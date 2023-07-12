@@ -140,16 +140,17 @@ void SimpyScreenShot::colorPickerOperator() {
 
 void SimpyScreenShot::copyImageOperator() {
     if (pixmap.isNull()) {
-        QMessageBox::warning(this, "警告", "没截图也不能复制(●'◡'●)");
+        mNotificationBox->sendMsg("没截图不能复制 (●'◡'●)", QIcon(":/warningIcon.png"));
         return;
     }
         QClipboard *clipboard = QGuiApplication::clipboard(); // 获取剪贴板对象
         clipboard->setPixmap(pixmap); // 将图片复制到剪贴板
+    mNotificationBox->sendMsg("图片已复制到剪切板", QIcon(":/successIcon.png"));
 }
 
 void SimpyScreenShot::saveImageOperator() {
     if(pixmap.isNull()) {
-        QMessageBox::warning(this, "警告", "没截图怎么保存(●'◡'●)");
+        mNotificationBox->sendMsg("没截图不能保存 (●'◡'●)", QIcon(":/warningIcon.png"));
         return;
     }
     QString &&saveDir = QFileDialog::getExistingDirectory(this, "选择保存路径");
@@ -176,20 +177,21 @@ void SimpyScreenShot::saveImageOperator() {
     }
 
     if(ret != 0) {
-        QMessageBox::information(this, "保存成功", "保存成功");
+        mNotificationBox->sendMsg("保存成功", QIcon(":/successIcon.png"));
     }
     else {
-        QMessageBox::information(this, "保存失败", "保存失败");
+        mNotificationBox->sendMsg("保存失败", QIcon(":/errorIcon.png"));
     }
 }
 
 void SimpyScreenShot::copyColorOperator() {
     if(strHex.isEmpty()) {
-        QMessageBox::warning(this, "警告", "还没有取色哦`(*>﹏<*)′");
+        mNotificationBox->sendMsg("还没有取色哦 (*>﹏<*)", QIcon(":/warningIcon.png"));
         return;
     }
     QClipboard *clipboard = QGuiApplication::clipboard(); // 获取剪贴板对象
     clipboard->setText(strHex);
+    mNotificationBox->sendMsg("已复制到剪切板", QIcon(":/successIcon.png"));
 }
 
 void SimpyScreenShot::showColorPicker() {
@@ -266,5 +268,8 @@ void SimpyScreenShot::showEvent(QShowEvent *event) {
         if(strcmp(obj->metaObject()->className(), "MainWindow") == 0) {
             mainWindow = qobject_cast<QWidget*>(obj);
         }
+    }
+    if(mNotificationBox == nullptr) {
+        mNotificationBox = new MNotificationBox(this);
     }
 }

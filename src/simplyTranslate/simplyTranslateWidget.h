@@ -11,6 +11,7 @@
 #include <QTextEdit>
 #include <QComboBox>
 #include "customComponents/MButton.h"
+#include "customComponents/MNotificationBox.h"
 
 class simplyTranslateWidget : public QWidget{
     Q_OBJECT
@@ -21,6 +22,9 @@ private:
     void initUI();
 public:
     void keyPressEvent(QKeyEvent* event)override;
+
+protected:
+    void showEvent(QShowEvent *event)override;
 
 private slots:
     void on_btn_paste_clicked();
@@ -51,6 +55,8 @@ private:
     MButton *tranBtn = nullptr;
     MButton *clearBtn = nullptr;
     MButton *copyBtn = nullptr;
+
+    MNotificationBox *mNotificationBox = nullptr;
 };
 
 #endif //SIMPLYTOOLS_SIMPLYTRANSLATEWIDGET_H
