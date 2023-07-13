@@ -42,5 +42,5 @@ void MIcon::setTitle(const QString &title) {
 }
 
 void MIcon::setText(const QString &text) {
-    titleLabel->setText(text);
+    textLabel->setText(text);
 }

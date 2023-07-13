@@ -9,6 +9,8 @@ set(CMAKE_AUTOUIC ON)
 
 set(Qt5_DIR C:\\Qt\\Qt5.14.2\\5.14.2\\mingw73_64\\lib\\cmake\\Qt5)
 
+include_directories(C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.8_3.8.2800.0_x64__qbz5n2kfra8p0\\include)
+
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt5 COMPONENTS Gui  REQUIRED)
 find_package(Qt5 COMPONENTS Core  REQUIRED)

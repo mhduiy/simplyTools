@@ -9,6 +9,8 @@
 #include "customComponents/MIcon.h"
 #include "customComponents/MButton.h"
 #include "customComponents/MNotificationBox.h"
+#include "BiliBiliDataTool.h"
+#include <QThread>
 
 class BilibiliDataWidget : public QWidget{
     Q_OBJECT
@@ -23,6 +25,8 @@ private:
     void initData();
     void updateBtnClicked();
     void setInfoBtnClicked();
+
+    void showData(const QMap<int, QString>&);
 
 private:
     QLabel *headImageLabel = nullptr;
@@ -42,6 +46,11 @@ private:
     MIcon *readCountLabel = nullptr;
 
     MNotificationBox *mNotificationBox = nullptr;
+    BiliBiliDataTool *biliBiliDataTool = nullptr;
+
+    QThread *getBiliBiliDataThread = nullptr;
+
+    bool isFirstShow = true;
 };
 
 

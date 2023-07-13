@@ -73,14 +73,14 @@ MNotificationBox::MNotificationBox(QWidget *cutWidget){
     msgWidget = new MNotificationWidget(mainWindow);
 
     m_animation->setTargetObject(msgWidget);
-    m_animation->setEasingCurve(QEasingCurve::OutBack);
-    m_animation->setDuration(600);
+    m_animation->setEasingCurve(QEasingCurve::OutQuint);
+    m_animation->setDuration(500);
     m_animation->setPropertyName("pos");
 
     m_opacityAnimation = new QPropertyAnimation();
     m_opacityAnimation->setTargetObject(msgWidget);
-    m_opacityAnimation->setEasingCurve(QEasingCurve::OutBack);
-    m_opacityAnimation->setDuration(600);
+    m_opacityAnimation->setEasingCurve(QEasingCurve::OutQuint);
+    m_opacityAnimation->setDuration(500);
     m_opacityAnimation->setPropertyName("windowOpacity");
 
     msgWidget->setVisible(false);
@@ -91,9 +91,9 @@ MNotificationBox::MNotificationBox(QWidget *cutWidget){
     connect(msgWidget, &MNotificationWidget::closeBtnClicked, this, &MNotificationBox::closeMsgWidget);
 }
 
-void MNotificationBox::sendMsg(const QString &content, const QIcon &icon, int duration) {
+void MNotificationBox::sendMsg(const QString &content, const QIcon &icon, int _duration) {
     msgWidget->setContent(content, icon);
-    this->duration = duration;
+    this->duration = _duration;
     openMsgWidget();
 }
 
@@ -106,7 +106,6 @@ void MNotificationBox::closeMsgWidget() {
 
     qreal cutOpacity = msgWidget->windowOpacity();
     qreal tarOpacity = 0;
-    qDebug() << cutOpacity << " " <<tarOpacity;
     m_opacityAnimation->setStartValue(cutOpacity);
     m_opacityAnimation->setEndValue(tarOpacity);
     m_opacityAnimation->start();
@@ -131,7 +130,6 @@ void MNotificationBox::openMsgWidget() {
     qreal cutOpacity = msgWidget->windowOpacity();
     qreal tarOpacity = 1;
 
-    qDebug() << cutOpacity << " " <<tarOpacity;
     m_opacityAnimation->setStartValue(cutOpacity);
     m_opacityAnimation->setEndValue(tarOpacity);
     m_opacityAnimation->start();
@@ -143,7 +141,6 @@ QWidget *MNotificationBox::findMainWindow(QObject *obj) {
     if(obj == nullptr) {
         return nullptr;
     }
-    qDebug() << obj->metaObject()->className();
     if(strcmp(obj->metaObject()->className(), "MainWindow") == 0) {
         return qobject_cast<QWidget*>(obj);
     }

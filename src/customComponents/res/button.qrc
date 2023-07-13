@@ -10,5 +10,6 @@
         <file>successIcon.png</file>
         <file>errorIcon.png</file>
         <file>warningIcon.png</file>
+        <file>getBiliBiliData.py</file>
     </qresource>
 </RCC>

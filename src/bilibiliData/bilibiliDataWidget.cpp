@@ -5,10 +5,10 @@
 #include "bilibiliDataWidget.h"
 #include <QLayout>
 #include <QPixmap>
+#include <QDebug>
 
 BilibiliDataWidget::BilibiliDataWidget(QWidget *parent)  : QWidget(parent){
     initUI();
-    initData();
 }
 
 void BilibiliDataWidget::initUI() {
@@ -58,10 +58,10 @@ void BilibiliDataWidget::initUI() {
     operatorBtnLayout->addWidget(setInfoBtn);
     operatorBtnLayout->addWidget(updateBtn);
 
-    headLayout->addWidget(headImageLabel, 3);
-    headLayout->addLayout(userInfoLayout, 3);
+    headLayout->addWidget(headImageLabel, 5);
+    headLayout->addLayout(userInfoLayout, 5);
     headLayout->addStretch(1);
-    headLayout->addLayout(operatorBtnLayout, 3);
+    headLayout->addLayout(operatorBtnLayout, 5);
 
     displayLayout->addWidget(coinCountLabel, 0, 0);
     displayLayout->addWidget(followCountLabel, 0, 1);
@@ -80,6 +80,10 @@ void BilibiliDataWidget::initUI() {
 void BilibiliDataWidget::initData() {
     connect(setInfoBtn, &MButton::clicked, this, &BilibiliDataWidget::setInfoBtnClicked);
     connect(updateBtn, &MButton::clicked, this, &BilibiliDataWidget::updateBtnClicked);
+    connect(updateBtn, &MButton::clicked, biliBiliDataTool, &BiliBiliDataTool::getData);
+    connect(biliBiliDataTool, &BiliBiliDataTool::readUserImageFinish, [this](const QPixmap& pixmap){
+        headImageLabel->setPixmap(pixmap);
+    });
 }
 
 
@@ -88,13 +92,47 @@ void BilibiliDataWidget::showEvent(QShowEvent *event) {
     if(mNotificationBox == nullptr) {
         mNotificationBox = new MNotificationBox(this);
     }
+    if(biliBiliDataTool == nullptr) {
+        biliBiliDataTool = new BiliBiliDataTool();
+        connect(biliBiliDataTool, &BiliBiliDataTool::readFinish, this, &BilibiliDataWidget::showData);
+        connect(biliBiliDataTool, &BiliBiliDataTool::readError, this, [this](const QString& str){
+            this->mNotificationBox->sendMsg("读取失败: " + str, MSG_Error);
+        });
+    }
+    if(getBiliBiliDataThread == nullptr) {
+        getBiliBiliDataThread = new QThread();
+        biliBiliDataTool->moveToThread(getBiliBiliDataThread);
+        getBiliBiliDataThread->start();
+    }
 
+    if(isFirstShow) {
+        initData();
+        isFirstShow = false;
+    }
 }
 
 void BilibiliDataWidget::updateBtnClicked() {
-    mNotificationBox->sendMsg("功能还在建设中...", MSG_Success);
+    mNotificationBox->sendMsg("正在获取数据", MSG_Warning);
+//    biliBiliDataTool->getData();
 }
 
 void BilibiliDataWidget::setInfoBtnClicked() {
     mNotificationBox->sendMsg("功能还在建设中...", MSG_Success);
+}
+
+void BilibiliDataWidget::showData(const QMap<int, QString>& info) {
+    userNameLabel->setText("用户名: " + info.value(BL_userName, "*读取失败*"));
+    uidLabel->setText("UID: " + info.value(BL_uid, "*读取失败*"));
+    levelLabel->setText("等级: LV." + info.value(BL_level, "*读取失败*"));
+
+    coinCountLabel->setText(info.value(BL_coinCount, "*读取失败*"));
+    followCountLabel->setText(info.value(BL_followCount, "*读取失败*"));
+    fanCountLabel->setText(info.value(BL_fansCount, "*读取失败*"));
+    likeCountLabel->setText(info.value(BL_likeCount, "*读取失败*"));
+    playCountLabel->setText(info.value(BL_playCount, "*读取失败*"));
+    readCountLabel->setText(info.value(BL_readCount, "*读取失败*"));
+
+    mNotificationBox->sendMsg("刷新成功", MSG_Warning);
+
+    biliBiliDataTool->getImageFromUrl(info.value(BL_iconUrl));
 }
