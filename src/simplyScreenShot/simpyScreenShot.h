@@ -46,6 +46,7 @@ private:
     void exitColorWidget();
 
     QPixmap pixmap;
+    QPixmap tmpPixmap;
     QTimer timer;   //用于颜色实时获取
 
     MFullWidget *showImageWidget = nullptr;

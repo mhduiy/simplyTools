@@ -92,7 +92,7 @@ void SimpyScreenShot::colorPickerOperator() {
     }
     // 截一个图， 全屏显示
     QScreen *screen = QGuiApplication::primaryScreen();
-    pixmap = screen->grabWindow(0);
+    tmpPixmap = screen->grabWindow(0);
 
     // 截图后显示以无边框窗口全屏显示
     if(showImageWidget == nullptr) {
@@ -131,7 +131,7 @@ void SimpyScreenShot::colorPickerOperator() {
         showColorBox->layout()->setMargin(0);
         showColorBox->setFixedSize(150,150);
     }
-    showScreenImageLabel->setPixmap(pixmap);
+    showScreenImageLabel->setPixmap(tmpPixmap);
     showImageWidget->showMaximized();
     showColorBox->show();
     timer.start(3);
@@ -140,17 +140,17 @@ void SimpyScreenShot::colorPickerOperator() {
 
 void SimpyScreenShot::copyImageOperator() {
     if (pixmap.isNull()) {
-        mNotificationBox->sendMsg("没截图不能复制 (●'◡'●)", QIcon(":/warningIcon.png"));
+        mNotificationBox->sendMsg("没截图不能复制 (●'◡'●)", MSG_Warning);
         return;
     }
         QClipboard *clipboard = QGuiApplication::clipboard(); // 获取剪贴板对象
         clipboard->setPixmap(pixmap); // 将图片复制到剪贴板
-    mNotificationBox->sendMsg("图片已复制到剪切板", QIcon(":/successIcon.png"));
+    mNotificationBox->sendMsg("图片已复制到剪切板", MSG_Success);
 }
 
 void SimpyScreenShot::saveImageOperator() {
     if(pixmap.isNull()) {
-        mNotificationBox->sendMsg("没截图不能保存 (●'◡'●)", QIcon(":/warningIcon.png"));
+        mNotificationBox->sendMsg("没截图不能保存 (●'◡'●)", MSG_Warning);
         return;
     }
     QString &&saveDir = QFileDialog::getExistingDirectory(this, "选择保存路径");
@@ -177,21 +177,21 @@ void SimpyScreenShot::saveImageOperator() {
     }
 
     if(ret != 0) {
-        mNotificationBox->sendMsg("保存成功", QIcon(":/successIcon.png"));
+        mNotificationBox->sendMsg("保存成功", MSG_Success);
     }
     else {
-        mNotificationBox->sendMsg("保存失败", QIcon(":/errorIcon.png"));
+        mNotificationBox->sendMsg("保存失败", MSG_Error);
     }
 }
 
 void SimpyScreenShot::copyColorOperator() {
     if(strHex.isEmpty()) {
-        mNotificationBox->sendMsg("还没有取色哦 (*>﹏<*)", QIcon(":/warningIcon.png"));
+        mNotificationBox->sendMsg("还没有取色哦 (*>﹏<*)", MSG_Warning);
         return;
     }
     QClipboard *clipboard = QGuiApplication::clipboard(); // 获取剪贴板对象
     clipboard->setText(strHex);
-    mNotificationBox->sendMsg("已复制到剪切板", QIcon(":/successIcon.png"));
+    mNotificationBox->sendMsg("已复制到剪切板", MSG_Success);
 }
 
 void SimpyScreenShot::showColorPicker() {
@@ -212,7 +212,7 @@ void SimpyScreenShot::showColorPicker() {
     posLabelInDialog->setText(QString("位置:(%1, %2)").arg(x).arg(y));
 
     QScreen *screen = qApp->primaryScreen();
-    auto pixmapTmp = pixmap.copy(x,y,2,2);
+    auto pixmapTmp = tmpPixmap.copy(x,y,2,2);
 
     if (pixmapTmp.isNull()) {
         return;

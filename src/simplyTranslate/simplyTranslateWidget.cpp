@@ -9,6 +9,7 @@
 #include <QClipboard>
 #include <QMessageBox>
 #include <QFile>
+#include <QNetworkConfigurationManager>
 
 simplyTranslateWidget::simplyTranslateWidget(QWidget *parent) : QWidget(parent){
     initUI();
@@ -75,6 +76,12 @@ void simplyTranslateWidget::initUI() {
         tranToBox->setTitle("翻译结果");
     });
 
+    //链接显示翻译结果
+    connect(translatetool,&TranslateTool::disMsgAppend,this,[=](QString res){
+        mNotificationBox->sendMsg(res, QIcon(":/errorIcon.png"));
+        tranToBox->setTitle("翻译结果");
+    });
+
     TranStyle = new QVector<QString>    //显示翻译类型
             {
                     "中文->英文",
@@ -122,6 +129,12 @@ void simplyTranslateWidget::on_btn_tran_clicked()  //翻译
     int curIndex = isZHToeEN ? 0 : 1;
     if(src.isEmpty())
     {
+        mNotificationBox->sendMsg("请输入需要翻译的内容", MSG_Warning);
+        return;
+    }
+    QNetworkConfigurationManager mgr;
+    if(!mgr.isOnline()) {
+        mNotificationBox->sendMsg("网络似乎未连接...", MSG_Error);
         return;
     }
     if(!(TranStylecode->size() > curIndex))
@@ -141,12 +154,12 @@ void simplyTranslateWidget::on_btn_clear_clicked() //清除
 void simplyTranslateWidget::on_btn_copy_clicked()  //复制
 {
     if(ed_tranTo->toPlainText().isEmpty()) {
-        mNotificationBox->sendMsg("翻译结果为空", QIcon(":/warningIcon.png"));
+        mNotificationBox->sendMsg("翻译结果为空", MSG_Warning);
         return;
     }
     QClipboard *clipboard = QGuiApplication::clipboard();
     clipboard->setText(ed_tranTo->toPlainText());
-    mNotificationBox->sendMsg("翻译结果成功复制到剪切板", QIcon(":/successIcon.png"));
+    mNotificationBox->sendMsg("翻译结果成功复制到剪切板", MSG_Success);
 }
 
 

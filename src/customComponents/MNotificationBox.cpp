@@ -73,10 +73,18 @@ MNotificationBox::MNotificationBox(QWidget *cutWidget){
     msgWidget = new MNotificationWidget(mainWindow);
 
     m_animation->setTargetObject(msgWidget);
-    m_animation->setEasingCurve(QEasingCurve::OutCubic);
+    m_animation->setEasingCurve(QEasingCurve::OutBack);
     m_animation->setDuration(600);
     m_animation->setPropertyName("pos");
+
+    m_opacityAnimation = new QPropertyAnimation();
+    m_opacityAnimation->setTargetObject(msgWidget);
+    m_opacityAnimation->setEasingCurve(QEasingCurve::OutBack);
+    m_opacityAnimation->setDuration(600);
+    m_opacityAnimation->setPropertyName("windowOpacity");
+
     msgWidget->setVisible(false);
+    msgWidget->setWindowOpacity(0);
     msgWidget->raise();
 
     connect(&timer, &QTimer::timeout, this, &MNotificationBox::closeMsgWidget);
@@ -95,6 +103,14 @@ void MNotificationBox::closeMsgWidget() {
     m_animation->setStartValue(cutPoint);
     m_animation->setEndValue(tarPoint);
     m_animation->start();
+
+    qreal cutOpacity = msgWidget->windowOpacity();
+    qreal tarOpacity = 0;
+    qDebug() << cutOpacity << " " <<tarOpacity;
+    m_opacityAnimation->setStartValue(cutOpacity);
+    m_opacityAnimation->setEndValue(tarOpacity);
+    m_opacityAnimation->start();
+
     timer.stop();
 }
 
@@ -111,6 +127,15 @@ void MNotificationBox::openMsgWidget() {
     m_animation->setStartValue(cutPoint);
     m_animation->setEndValue(tarPoint);
     m_animation->start();
+
+    qreal cutOpacity = msgWidget->windowOpacity();
+    qreal tarOpacity = 1;
+
+    qDebug() << cutOpacity << " " <<tarOpacity;
+    m_opacityAnimation->setStartValue(cutOpacity);
+    m_opacityAnimation->setEndValue(tarOpacity);
+    m_opacityAnimation->start();
+
     timer.start(duration * 1000);
 }
 
@@ -123,4 +148,26 @@ QWidget *MNotificationBox::findMainWindow(QObject *obj) {
         return qobject_cast<QWidget*>(obj);
     }
     return findMainWindow(obj->parent());
+}
+
+void MNotificationBox::sendMsg(const QString &content, MsgIconType type, int _duration) {
+    QIcon icon;
+    switch (type) {
+        case MSG_Success: {
+            icon = QIcon(":/successIcon.png");
+            break;
+        }
+        case MSG_Warning: {
+            icon = QIcon(":/warningIcon.png");
+            break;
+        }
+        case MSG_Error: {
+            icon = QIcon(":/errorIcon.png");
+            break;
+        }
+        default: {
+
+        }
+    }
+    sendMsg(content, icon, _duration);
 }

@@ -11,6 +11,8 @@
 #include <QTimer>
 #include <QPropertyAnimation>
 
+enum MsgIconType {MSG_Success = 0, MSG_Warning, MSG_Error};
+
 class MNotificationWidget : public QWidget {
     Q_OBJECT
 public:
@@ -32,6 +34,7 @@ Q_OBJECT
 public:
     explicit MNotificationBox(QWidget *cutWidget);
     void sendMsg(const QString &content, const QIcon& icon = QIcon(), int duration = 2);
+    void sendMsg(const QString &content, MsgIconType type, int duration = 2);
     void closeMsgWidget();
     void openMsgWidget();
 
@@ -41,7 +44,8 @@ private:
     int duration = 3;   //消息对话框持续时间
     QWidget *mainWindow = nullptr;
     MNotificationWidget *msgWidget = nullptr;
-    QPropertyAnimation *m_animation;        //动画对象指针;
+    QPropertyAnimation *m_animation = nullptr;        //动画对象指针;
+    QPropertyAnimation *m_opacityAnimation = nullptr;        //动画对象指针;
 
     QPoint cutPoint;
     QPoint tarPoint;

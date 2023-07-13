@@ -6,7 +6,6 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     setWindowFlags(this->windowFlags() | Qt::WindowStaysOnTopHint);    //设置窗口置顶
-
     setWindowOpacity(0.95);
 
     auto *main = new QWidget;
@@ -24,9 +23,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     translateWidget = new simplyTranslateWidget();
     simpyScreenShot = new SimpyScreenShot();
+    bilibiliDataWidget = new BilibiliDataWidget();
     stackedWidget->addWidget(translateWidget);
     stackedWidget->addWidget(simpyScreenShot);
-    stackedWidget->addWidget(new QWidget);
+    stackedWidget->addWidget(bilibiliDataWidget);
 
     connect(sidebar, &MSidebar::currentIndexChanged, [this](int index){
         this->stackedWidget->setCurrentIndex(index);

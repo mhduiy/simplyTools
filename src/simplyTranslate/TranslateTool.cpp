@@ -46,7 +46,7 @@ void TranslateTool::TranslateFromBaidu(QString src, QString from, QString to)
 
         if(locationValueArray.empty())
         {
-            emit disMsgAppend("翻译错误:"+data);
+            emit disMsgAppend("翻译错误: json解析无数据");
             return;
         }
         QJsonValue locationArray = locationValueArray.at(0);
@@ -57,5 +57,4 @@ void TranslateTool::TranslateFromBaidu(QString src, QString from, QString to)
         emit translateOK(toMsg);
         reply->close();
     });
-
 }
