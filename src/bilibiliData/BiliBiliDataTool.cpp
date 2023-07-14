@@ -12,9 +12,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QPixmap>
-
-const QString sessdata = "af2f29c8%2C1704762516%2Cad7cf%2A71qWs1EFcs2cskQdRym9fATqazZDQRLVb5DWQR6mbx7U0DNonWhfd0yG6O2FAXcYEC_7xqigAAJgA";
-const QString bili_jct = "0a036ea1780e61be41b010e2fb7085ac";
+#include <QStandardPaths>
 
 BiliBiliDataTool::BiliBiliDataTool(QObject *parent) : QObject(parent) {
     jsonFilePath = qApp->applicationDirPath() + "/bilibili.json";
@@ -25,7 +23,7 @@ QMap<int, QString> BiliBiliDataTool::getData() {
     QMap<int, QString> result;
     QString command = QString("python3") +
             " D:\\code\\simplyTools\\src\\customComponents\\res\\getBiliBiliData.py"
-            + " " + sessdata + " " + bili_jct + " " + jsonFilePath;
+            + " " + sessdata + " " + bili_jct + " " + uid + " " + jsonFilePath;
     int ret = system(command.toLocal8Bit());
 
     // 读取json数据文件
@@ -54,6 +52,8 @@ QMap<int, QString> BiliBiliDataTool::getData() {
             }
         }
     }
+    file.close();
+    qDebug() << file.remove();
     emit readFinish(result);    // 发送成功读取的消息
     return result;
 }
@@ -83,4 +83,10 @@ void BiliBiliDataTool::getImageFromUrl(const QString &url) {
         // 清理资源
         reply->deleteLater();
     });
+}
+
+void BiliBiliDataTool::setData(const QString &_sessdata, const QString &_bili_jct, const QString &_uid) {
+    this->sessdata = _sessdata;
+    this->bili_jct = _bili_jct;
+    this->uid = _uid;
 }

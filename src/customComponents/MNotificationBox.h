@@ -26,7 +26,7 @@ signals:
 private:
     QLabel *contentLabel = nullptr;
     QLabel *iconLabel = nullptr;
-    MButton *closeBtn = nullptr;
+    MButton *closeBtn = nullptr;;
 };
 
 class MNotificationBox : public QObject{

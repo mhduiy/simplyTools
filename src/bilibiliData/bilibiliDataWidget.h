@@ -11,11 +11,14 @@
 #include "customComponents/MNotificationBox.h"
 #include "BiliBiliDataTool.h"
 #include <QThread>
+#include "setInfoDialog.h"
+#include <QSettings>
 
 class BilibiliDataWidget : public QWidget{
     Q_OBJECT
 public:
     explicit BilibiliDataWidget(QWidget *parent = nullptr);
+    void updateToolData();
 
 protected:
     void showEvent(QShowEvent *event) override;
@@ -27,6 +30,8 @@ private:
     void setInfoBtnClicked();
 
     void showData(const QMap<int, QString>&);
+
+    QWidget *findMainWindow(QObject *obj);
 
 private:
     QLabel *headImageLabel = nullptr;
@@ -51,6 +56,11 @@ private:
     QThread *getBiliBiliDataThread = nullptr;
 
     bool isFirstShow = true;
+    SetInfoDialog *setInfoDialog = nullptr;
+
+    QWidget *mainWindow = nullptr;
+
+    QSettings *settings = nullptr;
 };
 
 

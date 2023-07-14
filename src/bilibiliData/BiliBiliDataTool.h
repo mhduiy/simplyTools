@@ -46,6 +46,8 @@ public:
     QMap<int, QString> getData();
     void getImageFromUrl(const QString &url);
 
+    void setData(const QString &sessdata, const QString &bili_jct, const QString &uid);
+
 signals:
 
     void readFinish(const QMap<int, QString>& map);
@@ -55,6 +57,10 @@ signals:
 private:
     QString jsonFilePath;
     QNetworkAccessManager *manager = nullptr;
+
+    QString sessdata;
+    QString bili_jct;
+    QString uid;
 };
 
 

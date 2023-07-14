@@ -34,7 +34,8 @@ async def main() -> None:
         sessdata=arguments[0],
         bili_jct=arguments[1]
     )
-    bilibiliApi = user.User(uid=354386738, credential=CREDENTIAL)
+
+    bilibiliApi = user.User(uid=int(arguments[2]), credential=CREDENTIAL)
     userInfo = await bilibiliApi.get_user_info()
     relationInfo = await bilibiliApi.get_relation_info()
     upInfo = await bilibiliApi.get_up_stat()
@@ -51,7 +52,7 @@ async def main() -> None:
     shouldInfo['readCount'] = upInfo['article']['view']
 
     # 将字典写入JSON文件
-    with open(arguments[2], "w") as file:
+    with open(arguments[3], "w") as file:
         json.dump(shouldInfo, file)
 
 # 传入参数: sessdata bili_jct json脚本绝对路径

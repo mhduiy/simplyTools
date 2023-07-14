@@ -6,9 +6,22 @@
 #include <QLayout>
 #include <QPixmap>
 #include <QDebug>
+#include <QGraphicsBlurEffect>
+#include <QGraphicsProxyWidget>
+#include <QDir>
+#include <QStandardPaths>
+
 
 BilibiliDataWidget::BilibiliDataWidget(QWidget *parent)  : QWidget(parent){
     initUI();
+
+    QString cacheDir = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+
+    // 创建目录
+    QDir dir;
+    dir.mkpath(cacheDir);
+
+    settings = new QSettings(cacheDir + "/config.ini", QSettings::IniFormat);
 }
 
 void BilibiliDataWidget::initUI() {
@@ -78,8 +91,10 @@ void BilibiliDataWidget::initUI() {
 }
 
 void BilibiliDataWidget::initData() {
+    updateToolData();
     connect(setInfoBtn, &MButton::clicked, this, &BilibiliDataWidget::setInfoBtnClicked);
     connect(updateBtn, &MButton::clicked, this, &BilibiliDataWidget::updateBtnClicked);
+    connect(updateBtn, &MButton::clicked, this, &BilibiliDataWidget::updateToolData);
     connect(updateBtn, &MButton::clicked, biliBiliDataTool, &BiliBiliDataTool::getData);
     connect(biliBiliDataTool, &BiliBiliDataTool::readUserImageFinish, [this](const QPixmap& pixmap){
         headImageLabel->setPixmap(pixmap);
@@ -108,6 +123,7 @@ void BilibiliDataWidget::showEvent(QShowEvent *event) {
     if(isFirstShow) {
         initData();
         isFirstShow = false;
+        mainWindow = findMainWindow(this);
     }
 }
 
@@ -117,7 +133,39 @@ void BilibiliDataWidget::updateBtnClicked() {
 }
 
 void BilibiliDataWidget::setInfoBtnClicked() {
-    mNotificationBox->sendMsg("功能还在建设中...", MSG_Success);
+    if(setInfoDialog == nullptr) {
+        setInfoDialog = new SetInfoDialog(this);
+        connect(setInfoDialog, &SetInfoDialog::exitDialog, this, [this](bool isCancel){
+            // 取消窗口的图形效果
+            if(!isCancel) {
+                emit this->updateBtn->clicked();
+            }
+            else {
+                mNotificationBox->sendMsg("已被取消", MSG_Warning);
+            }
+            mainWindow->setGraphicsEffect(nullptr);
+        });
+    }
+    // 创建模糊效果
+    auto *blurEffect = new QGraphicsBlurEffect(mainWindow);
+    blurEffect->setBlurHints(QGraphicsBlurEffect::PerformanceHint); // 设置性能提示
+    blurEffect->setBlurRadius(20);
+
+    //给嵌套QWidget设置阴影
+
+    mainWindow->setGraphicsEffect(blurEffect);
+    setInfoDialog->raise();
+    setInfoDialog->show();
+}
+
+QWidget *BilibiliDataWidget::findMainWindow(QObject *obj) {
+    if(obj == nullptr) {
+        return nullptr;
+    }
+    if(strcmp(obj->metaObject()->className(), "MainWindow") == 0) {
+        return qobject_cast<QWidget*>(obj);
+    }
+    return findMainWindow(obj->parent());
 }
 
 void BilibiliDataWidget::showData(const QMap<int, QString>& info) {
@@ -135,4 +183,12 @@ void BilibiliDataWidget::showData(const QMap<int, QString>& info) {
     mNotificationBox->sendMsg("刷新成功", MSG_Warning);
 
     biliBiliDataTool->getImageFromUrl(info.value(BL_iconUrl));
+}
+
+void BilibiliDataWidget::updateToolData() {
+    QString sessdata = settings->value("bilibiliData/sessdata").toString();
+    QString bili_jct = settings->value("bilibiliData/bili_jct").toString();
+    QString uid = settings->value("bilibiliData/uid").toString();
+
+    biliBiliDataTool->setData(sessdata, bili_jct, uid);
 }
