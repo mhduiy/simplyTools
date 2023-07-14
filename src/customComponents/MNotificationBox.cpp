@@ -8,7 +8,7 @@
 #include <QFile>
 
 MNotificationWidget::MNotificationWidget(QWidget *mainWindow) : QWidget(mainWindow){
-    setFixedSize(300,60);
+    setFixedSize(360,60);
 
     contentLabel = new QLabel;
     iconLabel = new QLabel;
@@ -27,6 +27,7 @@ MNotificationWidget::MNotificationWidget(QWidget *mainWindow) : QWidget(mainWind
     font.setPixelSize(16);
     contentLabel->setFont(font);
     contentLabel->setAlignment(Qt::AlignCenter);
+    contentLabel->setStyleSheet("color: #ffffff;");
 
 //    contentLayout->addWidget(iconLabel);
 //    contentLayout->addWidget(contentLabel);
@@ -37,11 +38,7 @@ MNotificationWidget::MNotificationWidget(QWidget *mainWindow) : QWidget(mainWind
     mainLayout->addWidget(closeBtn, 1);
     this->setAttribute(Qt::WA_StyledBackground);
     this->setAutoFillBackground(true);
-    this->setStyleSheet("MNotificationWidget{\n"
-                        "    background-color: #ffffff;\n"
-                        "    border: 1px lightblue solid;\n"
-                        "    border-radius: 12px;\n"
-                        "}");
+    this->setStyleSheet("MNotificationWidget{ background-color: #1d1d1d; border: 4px red solid; border-radius: 12px; }");
 
 //    closeBtn->setVisible(false);
 

@@ -25,7 +25,7 @@ void MSidebar::initUI() {
     foldBtn->setIcon(arrowIcon.transformed(QTransform().rotate(180)));
     foldBtn->setFixedSize(20, 20);
     foldBtn->setIconSize(QSize(20, 20));
-    foldBtn->setStyleSheet("QPushButton{border: 0px; border-radius: 20px; margin: 0px; padding: 0px}");
+    foldBtn->setStyleSheet("QPushButton{background-color: transparent; border: 0px; border-radius: 20px; margin: 0px; padding: 0px}");
 
     setContentsMargins(0,0,0,0);
 

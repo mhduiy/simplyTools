@@ -11,8 +11,8 @@ MIcon::MIcon(const QString& title, const QString &text, QWidget *parent) : QWidg
     titleLabel = new QLabel(title, this);
     textLabel = new QLabel(text);
 
-    titleLabel->setStyleSheet(R"(QLabel { font-size: 15px; color: #FFFFFF;font-family: 黑体; padding: 0px; border: 1px black solid;})");
-    textLabel->setStyleSheet(R"(QLabel { font-size: 28px; color: #FFFFFF;font-family: 黑体; padding 0px; border: 1px black solid;})");
+    titleLabel->setStyleSheet(R"(QLabel {background-color: transparent;  font-size: 15px; color: #FFFFFF;font-family: 黑体; padding: 0px; border: 1px black solid;})");
+    textLabel->setStyleSheet(R"(QLabel {background-color: transparent;  font-size: 28px; color: #FFFFFF;font-family: 黑体; padding 0px; border: 1px black solid;})");
     textLabel->setAlignment(Qt::AlignHCenter);
 
     auto *mainLayout = new QVBoxLayout(this);

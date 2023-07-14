@@ -15,12 +15,14 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    explicit MainWindow(QWidget *parent = nullptr);
+    ~MainWindow()override;
 
 protected:
     void showEvent(QShowEvent *event)override;
     void resizeEvent(QResizeEvent *event) override;
+
+    void paintEvent(QPaintEvent* event) override;
 
 private:
     MSidebar *sidebar = nullptr;

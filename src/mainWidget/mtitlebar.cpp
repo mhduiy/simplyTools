@@ -50,10 +50,13 @@ MTitleBar::MTitleBar(QWidget *parent) : QWidget(parent)
     mainLayout->addWidget(titleLabel, 2);
     mainLayout->addStretch(2);
     mainLayout->addLayout(operatorLayout, 2);
+
     setAttribute(Qt::WA_StyledBackground);
     setAutoFillBackground(true);
 
-    this->setFixedHeight(40);
+    setStyleSheet(" MTitleBar{ background-color: #ffffff; } ");
+
+    this->setFixedHeight(45);
 
     connect(fixBtn, &QPushButton::clicked, this, &MTitleBar::fixWindow);
     connect(minBtn, &QPushButton::clicked, this, &MTitleBar::minWindow);

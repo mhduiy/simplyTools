@@ -31,7 +31,7 @@ void BilibiliDataWidget::initUI() {
     headImageLabel->setFixedSize(100, 100);
     headImageLabel->setMargin(5);
 
-    headImageLabel->setStyleSheet("QLabel{ border: 1px solid lightgray; border-radius: 50px;}");
+//    headImageLabel->setStyleSheet("QLabel{ border: 1px solid lightgray; border-radius: 50px;}");
 
     userNameLabel = new QLabel("用户名: ******");
     uidLabel = new QLabel("UID: ******");

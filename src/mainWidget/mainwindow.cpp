@@ -1,13 +1,15 @@
 #include "mainwindow.h"
 #include <QLayout>
 #include <QStatusBar>
+#include <QBitmap>
+#include <QPainter>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     setWindowFlags(this->windowFlags() | Qt::WindowStaysOnTopHint);    //设置窗口置顶
     setWindowFlags(this->windowFlags() | Qt::FramelessWindowHint);
-    setWindowOpacity(0.95);
+    setWindowOpacity(0.9);
 
     auto *main = new QWidget;
     QLayout *mainLayout = new QVBoxLayout(main);
@@ -40,6 +42,8 @@ MainWindow::MainWindow(QWidget *parent)
     this->centralWidget()->layout()->setContentsMargins(15,3,15,3);
 
     sidebar->raise();  // 控件置顶
+
+    this->setStyleSheet("MainWindow{ background-color: #ffffff; border-radius: 10px;}");
 }
 
 void MainWindow::showEvent(QShowEvent *event) {
@@ -49,6 +53,14 @@ void MainWindow::showEvent(QShowEvent *event) {
 void MainWindow::resizeEvent(QResizeEvent *event) {
     QWidget::resizeEvent(event);
     sidebar->setFixedHeight(this->geometry().height());
+}
+
+void MainWindow::paintEvent(QPaintEvent *event) {
+    QStyleOption opt;
+    opt.init(this);
+    QPainter p(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+    QWidget::paintEvent(event);
 }
 
 MainWindow::~MainWindow()
