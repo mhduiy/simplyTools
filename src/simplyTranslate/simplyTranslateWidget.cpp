@@ -29,46 +29,59 @@ void simplyTranslateWidget::initUI() {
     tranToBox = new QGroupBox();
     ed_tranFrom = new QTextEdit();
     ed_tranTo = new QTextEdit();
-    tranOptionBtn = new MButton("中文->英文");
-    pasteBtn = new MButton("粘贴");
-    tranBtn = new MButton("翻译");
-    clearBtn = new MButton("清除");
-    copyBtn = new MButton("复制");
 
-    auto *mainLayout = new QHBoxLayout(this);
-    auto *edLayout = new QVBoxLayout();
-    auto *btnLayout = new QVBoxLayout();
+    srcTypeBox = new QComboBox();
+    tarTypeBox = new QComboBox();
+    exchangeBtn = new MButton();
+    setUserInfoBtn = new MButton("设置api信息");
+
+    exchangeBtn->setIcon(QIcon(":/exchangeIcon.png"));
+
+    pasteBtn = new MButton("从剪切板粘贴");
+    tranBtn = new MButton("翻译");
+    clearBtn = new MButton("清除内容");
+    copyBtn = new MButton("复制翻译结果");
+
+    exchangeBtn->setFixedSize(36,36);
+    srcTypeBox->setFixedHeight(36);
+    tarTypeBox->setFixedHeight(36);
+
+    auto *mainLayout = new QVBoxLayout(this);
+    auto *topOperatorLayout = new QHBoxLayout();
+    auto *bottomOperatorLayout = new QHBoxLayout();
+
+    topOperatorLayout->addWidget(srcTypeBox);
+    topOperatorLayout->addWidget(exchangeBtn);
+    topOperatorLayout->addWidget(tarTypeBox);
+    topOperatorLayout->addWidget(tranBtn);
+    topOperatorLayout->addWidget(pasteBtn);
+
+    bottomOperatorLayout->addWidget(setUserInfoBtn);
+    bottomOperatorLayout->addWidget(clearBtn);
+    bottomOperatorLayout->addWidget(copyBtn);
+
+    mainLayout->addLayout(topOperatorLayout);
+    mainLayout->addWidget(tranFromBox);
+    mainLayout->addWidget(tranToBox);
+    mainLayout->addLayout(bottomOperatorLayout);
 
     tranFromBox->setLayout(new QVBoxLayout);
     tranFromBox->layout()->addWidget(ed_tranFrom);
     tranToBox->setLayout(new QVBoxLayout);
     tranToBox->layout()->addWidget(ed_tranTo);
 
-    tranFromBox->setTitle("在这里输入你要翻译的内容");
+    tranFromBox->setTitle("输入需要翻译的内容");
     tranToBox->setTitle("翻译结果");
-
-    edLayout->addWidget(tranFromBox);
-    edLayout->addWidget(tranToBox);
-
-    btnLayout->addWidget(tranOptionBtn);
-    btnLayout->addWidget(tranBtn);
-    btnLayout->addWidget(clearBtn);
-    btnLayout->addWidget(pasteBtn);
-    btnLayout->addWidget(copyBtn);
 
     tranBtn->setCategory(MBtn_suggested);
     clearBtn->setCategory(MBtn_warning);
 
-    mainLayout->addLayout(edLayout);
-    mainLayout->addLayout(btnLayout);
-
-//    mainWindow
-
-    connect(tranOptionBtn, &MButton::clicked, this, &simplyTranslateWidget::on_btn_FormAndTo_clicked);
+//    connect(tranOptionBtn, &MButton::clicked, this, &simplyTranslateWidget::on_btn_FormAndTo_clicked);
     connect(pasteBtn, &MButton::clicked, this, &simplyTranslateWidget::on_btn_paste_clicked);
     connect(tranBtn, &MButton::clicked, this, &simplyTranslateWidget::on_btn_tran_clicked);
     connect(clearBtn, &MButton::clicked, this, &simplyTranslateWidget::on_btn_clear_clicked);
     connect(copyBtn, &MButton::clicked, this, &simplyTranslateWidget::on_btn_copy_clicked);
+    connect(exchangeBtn, &MButton::clicked, this, &simplyTranslateWidget::on_btn_exchange_clicked);
 
     //链接显示翻译结果
     connect(translatetool,&TranslateTool::translateOK,this,[=](QString res){
@@ -81,21 +94,6 @@ void simplyTranslateWidget::initUI() {
         mNotificationBox->sendMsg(res, QIcon(":/errorIcon.png"));
         tranToBox->setTitle("翻译结果");
     });
-
-    TranStyle = new QVector<QString>    //显示翻译类型
-            {
-                    "中文->英文",
-                    "英文->中文"
-            };
-
-    tranOptionBtn->setText(TranStyle->value(0));
-
-    TranStylecode = new QVector<QPair<QString,QString>>
-            {
-                    QPair<QString,QString>{"zh","en"},
-                    QPair<QString,QString>{"en","zh"}
-            };
-
     qDebug() << QSslSocket::supportsSsl()
              << QSslSocket::sslLibraryBuildVersionString()
              << QSslSocket::sslLibraryVersionString();
@@ -126,7 +124,6 @@ void simplyTranslateWidget::on_btn_tran_clicked()  //翻译
 {
     //获取翻译内容
     QString src = ed_tranFrom->toPlainText();
-    int curIndex = isZHToeEN ? 0 : 1;
     if(src.isEmpty())
     {
         mNotificationBox->sendMsg("请输入需要翻译的内容", MSG_Warning);
@@ -137,12 +134,9 @@ void simplyTranslateWidget::on_btn_tran_clicked()  //翻译
         mNotificationBox->sendMsg("网络似乎未连接...", MSG_Error);
         return;
     }
-    if(!(TranStylecode->size() > curIndex))
-    {
-        QMessageBox::warning(this,"错误","curIndex error");
-    }
     tranToBox->setTitle("翻译中...");
-    translatetool->TranslateFromBaidu(src,TranStylecode->value(curIndex).first,TranStylecode->value(curIndex).second);
+    translatetool->TranslateFromBaidu(src,srcTypeMap.value(srcTypeBox->currentIndex()).second
+                                      ,tarTypeMap.value(tarTypeBox->currentIndex()).second);
 }
 
 void simplyTranslateWidget::on_btn_clear_clicked() //清除
@@ -163,21 +157,29 @@ void simplyTranslateWidget::on_btn_copy_clicked()  //复制
 }
 
 
-void simplyTranslateWidget::on_btn_FormAndTo_clicked()
-{
-    if(tranOptionBtn->text() == TranStyle->value(0)) {
-        tranOptionBtn->setText(TranStyle->value(1));
-        isZHToeEN = false;
-    }
-    else {
-        tranOptionBtn->setText(TranStyle->value(0));
-        isZHToeEN = true;
+void simplyTranslateWidget::showEvent(QShowEvent *event) {
+    QWidget::showEvent(event);
+    if(isFirstShow) {
+        mNotificationBox = new MNotificationBox(this);
+        for(auto &pair : srcTypeMap) {
+            srcTypeBox->addItem(pair.first);
+        }
+        for(auto &pair : tarTypeMap) {
+            tarTypeBox->addItem(pair.first);
+        }
+        srcTypeBox->setCurrentIndex(0);
+        tarTypeBox->setCurrentIndex(0);
+
+        isFirstShow = false;
     }
 }
 
-void simplyTranslateWidget::showEvent(QShowEvent *event) {
-    QWidget::showEvent(event);
-    if(mNotificationBox == nullptr) {
-        mNotificationBox = new MNotificationBox(this);
+void simplyTranslateWidget::on_btn_exchange_clicked() {
+    if(srcTypeBox->currentText() == "自动检测") {
+        mNotificationBox->sendMsg("目标语言不能设置为自动检测", MSG_Error);
+        return;
     }
+    QString &&t = srcTypeBox->currentText();
+    srcTypeBox->setCurrentText(tarTypeBox->currentText());
+    tarTypeBox->setCurrentText(t);
 }

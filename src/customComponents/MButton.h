@@ -16,7 +16,7 @@ enum Category{
 class MButton : public QPushButton{
     Q_OBJECT
 public:
-    MButton(const QString &text, QWidget *parent = nullptr);
+    explicit MButton(const QString &text = "", Category type = MBtn_ordinary, QWidget *parent = nullptr);
     void setCategory(Category category);
 
 private:

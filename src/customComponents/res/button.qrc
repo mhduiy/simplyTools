@@ -16,5 +16,7 @@
         <file>minWindow.png</file>
         <file>unFixWindow.png</file>
         <file>appIcon.png</file>
+        <file>exchangeIcon.png</file>
+        <file>down-arrow.png</file>
     </qresource>
 </RCC>

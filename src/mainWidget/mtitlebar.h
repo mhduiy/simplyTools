@@ -37,7 +37,6 @@ private:
 
     QWidget *mainWindow = nullptr;
 
-    bool isPressed = false;
     QPoint tPos = QPoint(0,0);
 };
 

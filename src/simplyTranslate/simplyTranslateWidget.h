@@ -10,8 +10,37 @@
 #include <QGroupBox>
 #include <QTextEdit>
 #include <QComboBox>
+#include <QVector>
 #include "customComponents/MButton.h"
 #include "customComponents/MNotificationBox.h"
+
+const QVector<QPair<QString, QString>> srcTypeMap {
+        {"自动检测", "auto"},
+        {"中文", "zh"},
+        {"繁体中文", "cht"},
+        {"英语", "en"},
+        {"日语", "jp"},
+        {"粤语", "yue"},
+        {"文言文", "wyw"},
+        {"韩语", "kor"},
+        {"法语", "fra"},
+        {"德语", "de"},
+        {"俄语", "ru"},
+        {"西班牙语", "spa"}
+};
+const QVector<QPair<QString, QString>> tarTypeMap {
+        {"中文", "zh"},
+        {"繁体中文", "cht"},
+        {"英语", "en"},
+        {"日语", "jp"},
+        {"粤语", "yue"},
+        {"文言文", "wyw"},
+        {"韩语", "kor"},
+        {"法语", "fra"},
+        {"德语", "de"},
+        {"俄语", "ru"},
+        {"西班牙语", "spa"}
+};
 
 class simplyTranslateWidget : public QWidget{
     Q_OBJECT
@@ -35,7 +64,7 @@ private slots:
 
     void on_btn_copy_clicked();
 
-    void on_btn_FormAndTo_clicked();
+    void on_btn_exchange_clicked();
 
 private:
 
@@ -44,13 +73,18 @@ private:
 
     TranslateTool *translatetool;
 
-    bool isZHToeEN = true;  // 当前是中文到英文的翻译
+    bool isFirstShow = true;
+
+    QComboBox *srcTypeBox = nullptr;
+    QComboBox *tarTypeBox = nullptr;
+    MButton *exchangeBtn = nullptr;
+    MButton *setUserInfoBtn = nullptr;
 
     QGroupBox *tranFromBox = nullptr;
     QGroupBox *tranToBox = nullptr;
     QTextEdit *ed_tranTo = nullptr;
     QTextEdit *ed_tranFrom = nullptr;
-    MButton *tranOptionBtn = nullptr;
+
     MButton *pasteBtn = nullptr;
     MButton *tranBtn = nullptr;
     MButton *clearBtn = nullptr;

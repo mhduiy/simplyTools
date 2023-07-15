@@ -20,3 +20,61 @@ QTextEdit {
     background-color:transparent;
     border: 0px;
 }
+
+QComboBox {
+    background-color: #f1f1f1;
+    border-color: #b4b4b4;
+    border-radius: 6px;
+    border: 2px solid #d0d0d0;
+    selection-background-color: #128bff;
+    selection-color: white;
+}
+
+/*点击QComboBox后的已选中项的样式 */
+QComboBox:on {
+    color: rgb(0, 128, 255);
+    background-color: #c0c0c0;
+}
+
+/* 下拉展开后，整个下拉窗体样式 */
+QComboBox QAbstractItemView {
+    border: 1px solid #b4b4b4;
+    background-color: #f1f1f1;
+    outline: 0px;
+    /* 整个下拉窗体的背景色 */
+    /* selection-color: #3773b8; */
+    /*下拉框选中项字体颜色*/
+    /* selection-background-color: #298DFF; */
+    /* 下拉框选中项的背景色 */
+}
+
+QComboBox QAbstractItemView::item {
+    color: rgb(205, 0, 0);
+    background-color: #ffffff;
+}
+
+/* 下拉框箭头样式 */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    /* 子控件在父元素中的原点矩形。如果未指定此属性，则默认为padding。 */
+    subcontrol-position: top right;
+    /* 下拉框的位置（右上） */
+    width: 20px;
+    /* 下拉框的宽度 */
+    border-top-right-radius: 3px;
+    /* 下拉框的右上边界线的圆角半径（应和整个QComboBox右上边界线的圆角半径一致） */
+    border-bottom-right-radius: 3px;
+    /* 同上 */
+    background: transparent;
+}
+
+/* 下拉箭头样式 */
+QComboBox::down-arrow {
+    width: 20px;
+    /* 下拉箭头的宽度（建议与下拉框drop-down的宽度一致） */
+    background: transparent;
+    /* 下拉箭头的的背景色 */
+    padding: 0px 0px 0px 0px;
+    /* 上内边距、右内边距、下内边距、左内边距 */
+    image: url(:/down-arrow.png);
+}

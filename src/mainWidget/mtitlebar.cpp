@@ -11,6 +11,10 @@ MTitleBar::MTitleBar(QWidget *parent) : QWidget(parent)
     iconLabel = new QLabel("图标");
     titleLabel = new QLabel("title");
 
+    QFont font = titleLabel->font();
+    font.setPixelSize(20);
+    titleLabel->setFont(font);
+
     iconLabel->setScaledContents(true);
 
     fixBtn = new MButton("");
@@ -116,22 +120,18 @@ void MTitleBar::showEvent(QShowEvent *event)
 void MTitleBar::mousePressEvent(QMouseEvent *event)
 {
     QWidget::mousePressEvent(event);
-    isPressed = true;
     tPos = event->globalPos() - mainWindow->geometry().topLeft();
 }
 
 void MTitleBar::mouseReleaseEvent(QMouseEvent *event)
 {
     QWidget::mouseReleaseEvent(event);
-    isPressed = false;
 }
 
 void MTitleBar::mouseMoveEvent(QMouseEvent *event)
 {
     QWidget::mouseMoveEvent(event);
-    if(isPressed) {
-        mainWindow->move(event->globalPos() - tPos);
-    }
+    mainWindow->move(event->globalPos() - tPos);
 }
 
 QWidget *MTitleBar::findMainWindow(QObject *obj)

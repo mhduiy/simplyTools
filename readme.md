@@ -4,9 +4,9 @@
 
 ![img](img/img.png)
 
-![img.png](img/img2.png)
+![img](img/img2.png)
 
-![img_1.png](img/img3.png)
+![img](img/img3.png)
 ## V1.0 准备实现的功能
 
 - [x] 集成简单翻译
