@@ -111,7 +111,7 @@ void BilibiliDataWidget::showEvent(QShowEvent *event) {
         biliBiliDataTool = new BiliBiliDataTool();
         connect(biliBiliDataTool, &BiliBiliDataTool::readFinish, this, &BilibiliDataWidget::showData);
         connect(biliBiliDataTool, &BiliBiliDataTool::readError, this, [this](const QString& str){
-            this->mNotificationBox->sendMsg("读取失败: " + str, MSG_Error);
+            this->mNotificationBox->sendMsg("error: " + str, MSG_Error);
         });
     }
     if(getBiliBiliDataThread == nullptr) {

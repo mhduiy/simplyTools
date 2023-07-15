@@ -6,15 +6,18 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     setWindowFlags(this->windowFlags() | Qt::WindowStaysOnTopHint);    //设置窗口置顶
+    setWindowFlags(this->windowFlags() | Qt::FramelessWindowHint);
     setWindowOpacity(0.95);
 
     auto *main = new QWidget;
-    QLayout *mainLayout = new QHBoxLayout(main);
+    QLayout *mainLayout = new QVBoxLayout(main);
     sidebar = new MSidebar(this);
     stackedWidget = new QStackedWidget();
+    titleBar = new MTitleBar(this);
 
     sidebar->move(0, 0);
 //    mainLayout->addWidget(sidebar);
+    mainLayout->addWidget(titleBar);
     mainLayout->addWidget(stackedWidget);
 
     sidebar->addWidgetItem("simply翻译", QIcon(":/translate.png"));
@@ -34,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     statusBar()->hide();
     setCentralWidget(main);
-    this->centralWidget()->layout()->setMargin(10);
+    this->centralWidget()->layout()->setContentsMargins(15,3,15,3);
 
     sidebar->raise();  // 控件置顶
 }

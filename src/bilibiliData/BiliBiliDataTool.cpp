@@ -13,6 +13,7 @@
 #include <QNetworkReply>
 #include <QPixmap>
 #include <QStandardPaths>
+#include <QTemporaryFile>
 
 BiliBiliDataTool::BiliBiliDataTool(QObject *parent) : QObject(parent) {
     jsonFilePath = qApp->applicationDirPath() + "/bilibili.json";
@@ -20,22 +21,49 @@ BiliBiliDataTool::BiliBiliDataTool(QObject *parent) : QObject(parent) {
 }
 
 QMap<int, QString> BiliBiliDataTool::getData() {
+
+    // 获取脚本内容
+    QFile scriptFile(":/getBiliBiliData.py");
+
+    QByteArray scriptArray;
+
+    scriptFile.open(QIODevice::ReadOnly);
+    if(scriptFile.isOpen()) {
+        scriptArray = scriptFile.readAll();
+        scriptFile.close();
+    }
+
+    // 创建临时文件, 在对象析构的时候删除临时文件
+    QTemporaryFile tempFile;
+    tempFile.open();
+    QString tempFilePath = tempFile.fileName();
+
+    // 将脚本内容写入临时文件
+    QFile tepFile(tempFilePath);
+    if (tepFile.open(QIODevice::WriteOnly))
+    {
+        tepFile.write(scriptArray);
+        tepFile.close();
+    }
+
     QMap<int, QString> result;
-    QString command = QString("python3") +
-            " D:\\code\\simplyTools\\src\\customComponents\\res\\getBiliBiliData.py"
+    QString command = QString("python3") + " " +
+            tempFilePath
             + " " + sessdata + " " + bili_jct + " " + uid + " " + jsonFilePath;
     int ret = system(command.toLocal8Bit());
+
+    Q_UNUSED(ret)
 
     // 读取json数据文件
     QFile file(jsonFilePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        emit readError("JSON file opening failed");
+        emit readError("json file open fail");
         return result;
     }
     QByteArray jsonData = file.readAll();
     QJsonDocument document = QJsonDocument::fromJson(jsonData);
     if (document.isNull()) {
-        emit readError("json document is null");
+        emit readError("json data is null");
         return result;
     }
     QJsonObject jsonObject = document.object();

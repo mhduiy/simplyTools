@@ -11,5 +11,10 @@
         <file>errorIcon.png</file>
         <file>warningIcon.png</file>
         <file>getBiliBiliData.py</file>
+        <file>closeWindow.png</file>
+        <file>fixWindow.png</file>
+        <file>minWindow.png</file>
+        <file>unFixWindow.png</file>
+        <file>appIcon.png</file>
     </qresource>
 </RCC>

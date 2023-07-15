@@ -30,7 +30,7 @@ MButton[style='0']:hover{
 
 /**鼠标按压下去的样式**/
 MButton[style='0']:pressed,MButton[style='0']:checked{
-    background-color: rgb(36, 106, 175);
+    background-color: rgb(64,158,255);
 }
 
 /**按钮失能情况下样式**/
@@ -49,7 +49,7 @@ MButton[style='1']:hover{
 }
 
 /**鼠标按压下去的样式**/
-MButton[style='1']:pressed,MButton[style='0']:checked{
+MButton[style='1']:pressed,MButton[style='1']:checked{
     background-color: rgb(36, 106, 175);
 }
 
@@ -69,7 +69,7 @@ MButton[style='2']:hover{
 }
 
 /**鼠标按压下去的样式**/
-MButton[style='2']:pressed,MButton[style='0']:checked{
+MButton[style='2']:pressed,MButton[style='2']:checked{
     background-color: rgb(170, 54, 67);
 }
 

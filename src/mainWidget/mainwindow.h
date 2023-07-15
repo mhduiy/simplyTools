@@ -8,6 +8,7 @@
 #include "simplyTranslate/simplyTranslateWidget.h"
 #include "simplyScreenShot/simpyScreenShot.h"
 #include "bilibiliData/bilibiliDataWidget.h"
+#include "mtitlebar.h"
 
 class MainWindow : public QMainWindow
 {
@@ -28,6 +29,6 @@ private:
     simplyTranslateWidget *translateWidget = nullptr;
     SimpyScreenShot *simpyScreenShot = nullptr;
     BilibiliDataWidget *bilibiliDataWidget = nullptr;
-
+    MTitleBar *titleBar;
 };
 #endif // MAINWINDOW_H

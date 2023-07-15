@@ -119,7 +119,7 @@ void MNotificationBox::openMsgWidget() {
     cutPoint = msgWidget->pos();
     tarPoint = cutPoint;
     tarPoint.setX((mainWindow->width() - msgWidget->width()) / 2);
-    tarPoint.setY(20);
+    tarPoint.setY(35);
 
     msgWidget->setVisible(true);;
 
