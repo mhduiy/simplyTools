@@ -10,6 +10,7 @@
 #include <QMessageBox>
 #include <QFile>
 #include <QNetworkConfigurationManager>
+#include "global/globalSetting.h"
 
 simplyTranslateWidget::simplyTranslateWidget(QWidget *parent) : QWidget(parent){
     initUI();
@@ -73,6 +74,8 @@ void simplyTranslateWidget::initUI() {
     tranFromBox->setTitle("输入需要翻译的内容");
     tranToBox->setTitle("翻译结果");
 
+    ed_tranFrom->setPlaceholderText("输入需要翻译的内容，按住 CTRL + Enter 键可以快速翻译");
+
     tranBtn->setCategory(MBtn_suggested);
     clearBtn->setCategory(MBtn_warning);
 
@@ -82,6 +85,7 @@ void simplyTranslateWidget::initUI() {
     connect(clearBtn, &MButton::clicked, this, &simplyTranslateWidget::on_btn_clear_clicked);
     connect(copyBtn, &MButton::clicked, this, &simplyTranslateWidget::on_btn_copy_clicked);
     connect(exchangeBtn, &MButton::clicked, this, &simplyTranslateWidget::on_btn_exchange_clicked);
+    connect(setUserInfoBtn, &MButton::clicked, this, &simplyTranslateWidget::on_btn_setUserInfo_clicked);
 
     //链接显示翻译结果
     connect(translatetool,&TranslateTool::translateOK,this,[=](QString res){
@@ -101,8 +105,7 @@ void simplyTranslateWidget::initUI() {
 
 simplyTranslateWidget::~simplyTranslateWidget()
 {
-    delete TranStyle;
-    delete TranStylecode;
+
 }
 
 void simplyTranslateWidget::keyPressEvent(QKeyEvent *event)//绑定按键
@@ -118,6 +121,37 @@ void simplyTranslateWidget::on_btn_paste_clicked() //粘贴
     QClipboard *clipboard = QGuiApplication::clipboard();
     ed_tranFrom->clear();
     ed_tranFrom->setText(clipboard->text());
+}
+
+void simplyTranslateWidget::on_btn_setUserInfo_clicked() {
+    if(setInfoDialog == nullptr) {
+        setInfoDialog = new MDialog(this);
+        setInfoDialog->addItem("appId:", "", "百度翻译API的appId");
+        setInfoDialog->addItem("appKey:", "", "百度翻译API的密钥");
+    }
+    auto globalSettingInstance = globalSetting::getInstance();
+    if(globalSettingInstance) {
+        QString appId = globalSettingInstance->readConfig("simplyTranslate", "appId");
+        QString appKey = globalSettingInstance->readConfig("simplyTranslate", "appKey");
+        setInfoDialog->setDefaultStrById(appId, 0);
+        setInfoDialog->setDefaultStrById(appKey, 1);
+    }
+    else {
+        mNotificationBox->sendMsg("error: 全局设置对象为null", MSG_Error);
+        return;
+    }
+    int isSuc = setInfoDialog->exec();
+    if(isSuc) {
+        QString appId = setInfoDialog->getItemInfo(0);
+        QString appKey = setInfoDialog->getItemInfo(1);
+        globalSettingInstance->writeConfig("simplyTranslate", "appId", appId);
+        globalSettingInstance->writeConfig("simplyTranslate", "appKey", appKey);
+        mNotificationBox->sendMsg("设置成功", MSG_Success);
+    }
+    else {
+        mNotificationBox->sendMsg("取消设置", MSG_Warning);
+        return;
+    }
 }
 
 void simplyTranslateWidget::on_btn_tran_clicked()  //翻译

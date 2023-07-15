@@ -13,6 +13,7 @@
 #include <QVector>
 #include "customComponents/MButton.h"
 #include "customComponents/MNotificationBox.h"
+#include "customComponents/MDialog.h"
 
 const QVector<QPair<QString, QString>> srcTypeMap {
         {"自动检测", "auto"},
@@ -66,10 +67,10 @@ private slots:
 
     void on_btn_exchange_clicked();
 
-private:
+    void on_btn_setUserInfo_clicked();
 
-    QVector<QString> *TranStyle;        //显示翻译类型
-    QVector<QPair<QString,QString>> *TranStylecode;    //翻译类型
+
+private:
 
     TranslateTool *translatetool;
 
@@ -91,6 +92,8 @@ private:
     MButton *copyBtn = nullptr;
 
     MNotificationBox *mNotificationBox = nullptr;
+
+    MDialog *setInfoDialog = nullptr;
 };
 
 #endif //SIMPLYTOOLS_SIMPLYTRANSLATEWIDGET_H

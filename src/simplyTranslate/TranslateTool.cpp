@@ -4,7 +4,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QNetworkReply>
-
+#include "global/globalSetting.h"
 
 
 TranslateTool::TranslateTool(QObject *parent) : QObject(parent)
@@ -15,8 +15,17 @@ TranslateTool::TranslateTool(QObject *parent) : QObject(parent)
 void TranslateTool::TranslateFromBaidu(QString src, QString from, QString to)
 {
     //按照 appid+q+salt+密钥的顺序拼接得到字符串 1。
-    QString MY_APID = "20220509001209732";
-    QString MY_APID_KEY = "G8FLi63QsAvBtbogp7Ra";
+    auto globalSettingInstance = globalSetting::getInstance();
+    QString MY_APID;
+    QString MY_APID_KEY;
+    if(globalSettingInstance) {
+        MY_APID = globalSettingInstance->readConfig("simplyTranslate", "appId");
+        MY_APID_KEY = globalSettingInstance->readConfig("simplyTranslate", "appKey");
+    }
+    if(MY_APID.isEmpty() || MY_APID_KEY.isEmpty()) {
+        emit disMsgAppend("翻译错误: 没有设置API");
+        return;
+    }
     QString baseUrl = "https://fanyi-api.baidu.com/api/trans/vip/translate?";
 
     //生成md5加密文件
@@ -46,7 +55,62 @@ void TranslateTool::TranslateFromBaidu(QString src, QString from, QString to)
 
         if(locationValueArray.empty())
         {
-            emit disMsgAppend("翻译错误: json解析无数据");
+            int errorCode = jsonObject.value("error_code").toString().toInt();
+            QString errorStr;
+            switch (errorCode) {
+                case 52001: {
+                    errorStr = "请求超时";
+                    break;
+                }
+                case 52002: {
+                    errorStr = "系统错误";
+                    break;
+                }
+                case 52003: {
+                    errorStr = "未授权用户, 检查API是否正确设置";
+                    break;
+                }
+                case 54000: {
+                    errorStr = "必填参数为空";
+                    break;
+                }
+                case 54001: {
+                    errorStr = "签名错误";
+                    break;
+                }
+                case 54003: {
+                    errorStr = "访问频率受限";
+                    break;
+                }
+                case 54004: {
+                    errorStr = "账户余额不足";
+                    break;
+                }
+                case 54005: {
+                    errorStr = "长query请求频繁";
+                    break;
+                }
+                case 58000: {
+                    errorStr = "客户端IP非法";
+                    break;
+                }
+                case 58001: {
+                    errorStr = "译文语言方向不支持";
+                    break;
+                }
+                case 58002: {
+                    errorStr = "服务当前已关闭";
+                    break;
+                }
+                case 90107: {
+                    errorStr = "认证未通过或未生效";
+                    break;
+                }
+                default:{
+                    errorStr = "code: " + QString::number(errorCode);
+                }
+            }
+            emit disMsgAppend("翻译错误: " + errorStr);
             return;
         }
         QJsonValue locationArray = locationValueArray.at(0);

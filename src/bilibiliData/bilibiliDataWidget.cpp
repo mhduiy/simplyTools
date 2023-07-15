@@ -10,18 +10,11 @@
 #include <QGraphicsProxyWidget>
 #include <QDir>
 #include <QStandardPaths>
+#include "global/globalSetting.h"
 
 
 BilibiliDataWidget::BilibiliDataWidget(QWidget *parent)  : QWidget(parent){
     initUI();
-
-    QString cacheDir = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
-
-    // 创建目录
-    QDir dir;
-    dir.mkpath(cacheDir);
-
-    settings = new QSettings(cacheDir + "/config.ini", QSettings::IniFormat);
 }
 
 void BilibiliDataWidget::initUI() {
@@ -134,28 +127,38 @@ void BilibiliDataWidget::updateBtnClicked() {
 
 void BilibiliDataWidget::setInfoBtnClicked() {
     if(setInfoDialog == nullptr) {
-        setInfoDialog = new SetInfoDialog(this);
-        connect(setInfoDialog, &SetInfoDialog::exitDialog, this, [this](bool isCancel){
-            // 取消窗口的图形效果
-            if(!isCancel) {
-                emit this->updateBtn->clicked();
-            }
-            else {
-                mNotificationBox->sendMsg("已被取消", MSG_Warning);
-            }
-            mainWindow->setGraphicsEffect(nullptr);
-        });
+        setInfoDialog = new MDialog(this);
+        setInfoDialog->addItem("sessdata:", "", "在浏览器cookies中获取");
+        setInfoDialog->addItem("bili_jct:", "", "在浏览器cookies中获取");
+        setInfoDialog->addItem("uid:", "", "用户uid");
     }
-    // 创建模糊效果
-    auto *blurEffect = new QGraphicsBlurEffect(mainWindow);
-    blurEffect->setBlurHints(QGraphicsBlurEffect::PerformanceHint); // 设置性能提示
-    blurEffect->setBlurRadius(20);
-
-    //给嵌套QWidget设置阴影
-
-    mainWindow->setGraphicsEffect(blurEffect);
-    setInfoDialog->raise();
-    setInfoDialog->show();
+    auto globalSettingInstance = globalSetting::getInstance();
+    if(globalSettingInstance) {
+        QString sessdata = globalSettingInstance->readConfig("bilibiliData", "sessdata");
+        QString bili_jct = globalSettingInstance->readConfig("bilibiliData", "bili_jct");
+        QString uid = globalSettingInstance->readConfig("bilibiliData", "uid");
+        setInfoDialog->setDefaultStrById(sessdata, 0);
+        setInfoDialog->setDefaultStrById(bili_jct, 1);
+        setInfoDialog->setDefaultStrById(uid, 2);
+    }
+    else {
+        mNotificationBox->sendMsg("error: 全局设置对象为null", MSG_Error);
+        return;
+    }
+    int isSuc = setInfoDialog->exec();
+    if(isSuc) {
+        QString sessdata = setInfoDialog->getItemInfo(0);
+        QString bili_jct = setInfoDialog->getItemInfo(1);
+        QString uid = setInfoDialog->getItemInfo(2);
+        globalSettingInstance->writeConfig("bilibiliData", "sessdata", sessdata);
+        globalSettingInstance->writeConfig("bilibiliData", "bili_jct", bili_jct);
+        globalSettingInstance->writeConfig("bilibiliData", "uid", uid);
+        mNotificationBox->sendMsg("设置成功", MSG_Success);
+    }
+    else {
+        mNotificationBox->sendMsg("取消设置", MSG_Warning);
+        return;
+    }
 }
 
 QWidget *BilibiliDataWidget::findMainWindow(QObject *obj) {
@@ -186,9 +189,10 @@ void BilibiliDataWidget::showData(const QMap<int, QString>& info) {
 }
 
 void BilibiliDataWidget::updateToolData() {
-    QString sessdata = settings->value("bilibiliData/sessdata").toString();
-    QString bili_jct = settings->value("bilibiliData/bili_jct").toString();
-    QString uid = settings->value("bilibiliData/uid").toString();
+    auto globalSettingInstance = globalSetting::getInstance();
+    QString sessdata = globalSettingInstance->readConfig("bilibiliData", "sessdata");
+    QString bili_jct = globalSettingInstance->readConfig("bilibiliData", "bili_jct");
+    QString uid = globalSettingInstance->readConfig("bilibiliData", "uid");
 
     biliBiliDataTool->setData(sessdata, bili_jct, uid);
 }

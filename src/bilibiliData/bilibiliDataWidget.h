@@ -13,6 +13,7 @@
 #include <QThread>
 #include "setInfoDialog.h"
 #include <QSettings>
+#include "customComponents/MDialog.h"
 
 class BilibiliDataWidget : public QWidget{
     Q_OBJECT
@@ -56,11 +57,9 @@ private:
     QThread *getBiliBiliDataThread = nullptr;
 
     bool isFirstShow = true;
-    SetInfoDialog *setInfoDialog = nullptr;
 
     QWidget *mainWindow = nullptr;
-
-    QSettings *settings = nullptr;
+    MDialog *setInfoDialog = nullptr;
 };
 
 

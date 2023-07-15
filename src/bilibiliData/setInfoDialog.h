@@ -1,7 +1,9 @@
 //
-// Created by mhduiy on 2023/7/14.
+// Created by mhduiy on 2023/7/14.  已弃用该类
 //
 
+
+/********** 已弃用该类 ********/
 #ifndef SIMPLYTOOLS_SETINFODIALOG_H
 #define SIMPLYTOOLS_SETINFODIALOG_H
 
