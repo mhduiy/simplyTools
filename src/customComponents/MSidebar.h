@@ -6,13 +6,16 @@
 #define SIMPLYTOOLS_MSIDEBAR_H
 
 #include <QWidget>
+#include <DBlurEffectWidget>
 #include <QListWidget>
 #include "MButton.h"
 #include <QTimer>
 #include <QMouseEvent>
 #include <QPropertyAnimation>
 
-class MSidebar : public QWidget{
+DWIDGET_USE_NAMESPACE
+
+class MSidebar : public DBlurEffectWidget{
 Q_OBJECT
 public:
     explicit MSidebar(QWidget *parent = nullptr);

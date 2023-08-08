@@ -12,7 +12,7 @@ MTitleBar::MTitleBar(QWidget *parent) : QWidget(parent)
     titleLabel = new QLabel("title");
 
     QFont font = titleLabel->font();
-    font.setPixelSize(20);
+    font.setPixelSize(15);
     titleLabel->setFont(font);
 
     iconLabel->setScaledContents(true);
@@ -37,9 +37,9 @@ MTitleBar::MTitleBar(QWidget *parent) : QWidget(parent)
     fixBtn->setCheckable(true);
     fixBtn->setChecked(true);
 
-    fixBtn->setWhatsThis("固定这个窗口");
-    minBtn->setWhatsThis("收起这个窗口");
-    closeBtn->setWhatsThis("关掉这个窗口");
+    fixBtn->setToolTip("固定这个窗口");
+    minBtn->setToolTip("收起这个窗口");
+    closeBtn->setToolTip("关掉这个窗口");
 
     auto *operatorLayout = new QHBoxLayout();
     operatorLayout->addWidget(fixBtn);
@@ -55,10 +55,10 @@ MTitleBar::MTitleBar(QWidget *parent) : QWidget(parent)
     mainLayout->addStretch(2);
     mainLayout->addLayout(operatorLayout, 2);
 
-    setAttribute(Qt::WA_StyledBackground);
-    setAutoFillBackground(true);
+    setAttribute(Qt::WA_TranslucentBackground);
+//    setAutoFillBackground(true);
 
-    setStyleSheet(" MTitleBar{ background-color: #ffffff; } ");
+//    setStyleSheet(" MTitleBar{ background-color: #ffffff; } ");
 
     this->setFixedHeight(45);
 

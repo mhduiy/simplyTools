@@ -15,6 +15,9 @@ find_package(Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt5 COMPONENTS Gui  REQUIRED)
 find_package(Qt5 COMPONENTS Core  REQUIRED)
 find_package(Qt5 COMPONENTS Network  REQUIRED)
+find_package(Dtk COMPONENTS Widget REQUIRED)
+find_package(Dtk COMPONENTS Core REQUIRED)
+find_package(Dtk COMPONENTS Gui)
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 
@@ -35,4 +38,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         Qt5::Gui
         Qt5::Core
         Qt5::Network
+        ${DtkGui_LIBRARIES}
+        ${DtkCore_LIBRARIES}
+        ${DtkWidget_LIBRARIES}
         ) # 链接库

@@ -5,11 +5,10 @@
 #include <QPainter>
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
+    : DBlurEffectWidget(parent)
 {
     setWindowFlags(this->windowFlags() | Qt::WindowStaysOnTopHint);    //设置窗口置顶
     setWindowFlags(this->windowFlags() | Qt::FramelessWindowHint);
-    setWindowOpacity(0.9);
 
     auto *main = new QWidget;
     QLayout *mainLayout = new QVBoxLayout(main);
@@ -25,33 +24,35 @@ MainWindow::MainWindow(QWidget *parent)
     sidebar->addWidgetItem("simply翻译", QIcon(":/translate.png"));
     sidebar->addWidgetItem("屏幕截图", QIcon(":/screenShot.png"));
     sidebar->addWidgetItem("B站实时数据", QIcon(":/bilibiliData.png"));
+    sidebar->addWidgetItem("快捷应用", QIcon(":/bilibiliData.png"));
 
     translateWidget = new simplyTranslateWidget();
     simpyScreenShot = new SimpyScreenShot();
     bilibiliDataWidget = new BilibiliDataWidget();
+    fastAppWidget = new FastAppWidget();
+
     stackedWidget->addWidget(translateWidget);
     stackedWidget->addWidget(simpyScreenShot);
     stackedWidget->addWidget(bilibiliDataWidget);
+    stackedWidget->addWidget(fastAppWidget);
 
     connect(sidebar, &MSidebar::currentIndexChanged, [this](int index){
         this->stackedWidget->setCurrentIndex(index);
     });
 
-    statusBar()->hide();
-    setCentralWidget(main);
-    this->centralWidget()->layout()->setContentsMargins(15,3,15,3);
-
+    QLayout *mainWindowLayout = new QHBoxLayout(this);
+    mainWindowLayout->addWidget(main);
+    mainWindowLayout->setContentsMargins(15,3,15,3);
     sidebar->raise();  // 控件置顶
-
-    this->setStyleSheet("MainWindow{ background-color: #ffffff; border-radius: 10px;}");
+    setMaskAlpha(220);
 }
 
 void MainWindow::showEvent(QShowEvent *event) {
-    QWidget::showEvent(event);
+    Dtk::Widget::DBlurEffectWidget::showEvent(event);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event) {
-    QWidget::resizeEvent(event);
+    Dtk::Widget::DBlurEffectWidget::resizeEvent(event);
     sidebar->setFixedHeight(this->geometry().height());
 }
 
@@ -60,7 +61,7 @@ void MainWindow::paintEvent(QPaintEvent *event) {
     opt.init(this);
     QPainter p(this);
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-    QWidget::paintEvent(event);
+    Dtk::Widget::DBlurEffectWidget::paintEvent(event);
 }
 
 MainWindow::~MainWindow()

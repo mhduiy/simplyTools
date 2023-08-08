@@ -9,9 +9,12 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPixmap>
+#include <DImageViewer>
 #include <QTimer>
 #include "MFullWidget.h"
 #include "customComponents/MNotificationBox.h"
+
+DWIDGET_USE_NAMESPACE
 
 class SimpyScreenShot : public QWidget{
     Q_OBJECT
@@ -32,7 +35,7 @@ protected:
     void showEvent(QShowEvent *event)override;
 
 private:
-    QLabel *imageDisPlay = nullptr;         // 显示截图
+    DImageViewer *imageDisPlay = nullptr;         // 显示截图
     MButton *copyImageBtn = nullptr;        // 复制截图
     MButton *saveImageBtn = nullptr;        // 保存图片
     MButton *startScreenShotBtn = nullptr;  // 屏幕截图

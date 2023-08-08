@@ -2,15 +2,19 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <DBlurEffectWidget>
 #include <QStackedWidget>
 #include "customComponents/MButton.h"
 #include "customComponents/MSidebar.h"
 #include "simplyTranslate/simplyTranslateWidget.h"
 #include "simplyScreenShot/simpyScreenShot.h"
 #include "bilibiliData/bilibiliDataWidget.h"
+#include "fastApp/fastAppWidget.h"
 #include "mtitlebar.h"
 
-class MainWindow : public QMainWindow
+DWIDGET_USE_NAMESPACE
+
+class MainWindow : public DBlurEffectWidget
 {
     Q_OBJECT
 
@@ -31,6 +35,7 @@ private:
     simplyTranslateWidget *translateWidget = nullptr;
     SimpyScreenShot *simpyScreenShot = nullptr;
     BilibiliDataWidget *bilibiliDataWidget = nullptr;
+    FastAppWidget *fastAppWidget = nullptr;
     MTitleBar *titleBar;
 };
 #endif // MAINWINDOW_H

@@ -28,3 +28,5 @@ int main(int argc, char *argv[])
     w.show();
     return QApplication::exec();
 }
+
+// 添加一个App， 可以Dbus调用， 可以通过通过参数来启动

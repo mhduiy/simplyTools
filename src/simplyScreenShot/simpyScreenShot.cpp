@@ -26,7 +26,7 @@ SimpyScreenShot::SimpyScreenShot(QWidget *parent) : QWidget(parent){
 void SimpyScreenShot::initUI() {
     auto *mainLayout = new QVBoxLayout(this);
 
-    imageDisPlay = new QLabel();
+    imageDisPlay = new DImageViewer();
     copyImageBtn = new MButton("复制到剪切板");
     saveImageBtn = new MButton("保存");
     startColorPicker = new MButton("屏幕取色");
@@ -78,17 +78,20 @@ void SimpyScreenShot::initUI() {
 
 void SimpyScreenShot::screenShotOperator() {
     mainWindow->hide();
+    QThread::msleep(100);
     QScreen *screen = QGuiApplication::primaryScreen();
     pixmap = screen->grabWindow(0);
-    imageDisPlay->setScaledContents(true);   // 设置图片自动缩放
     imageDisPlay->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);  // 设置大小策略
-    imageDisPlay->setPixmap(pixmap);
+    imageDisPlay->setImage(pixmap.toImage());
     mainWindow->show();
 }
+
+// 先是一个框（透明的）等待用户开始剪切，
 
 void SimpyScreenShot::colorPickerOperator() {
     if(mainWindow) {
         mainWindow->hide();
+        QThread::msleep(100);
     }
     // 截一个图， 全屏显示
     QScreen *screen = QGuiApplication::primaryScreen();
