@@ -165,8 +165,32 @@ void FastAppItem::paintEvent(QPaintEvent *event) {
 
     // 绘制图标框
 
-    QRect imageBorderRect = rect().marginsRemoved(QMargins(25, 10, 25, 40));
+    // painter.setPen(Qt::red);
+    QRect imageBorderRect = rect().marginsRemoved(QMargins(25, 25, 25, 25));
     painter.drawPixmap(imageBorderRect, QPixmap(":/bilibiliData.png"));
+    // painter.drawRoundedRect(imageBorderRect, 5, 5);
+
+    // 绘制类型
+
+    painter.setBrush(Qt::white);
+    painter.setPen(Qt::NoPen);
+    QRect appTypeRect = QRect(rect().topLeft() + QPoint(8, 8), QSize(30, 15));
+    painter.drawRoundedRect(appTypeRect, 5, 5);
+
+    {
+    // 绘制类型文字
+        painter.setPen(Qt::black);
+        QFont font;
+        font.setPixelSize(10);
+        painter.setFont(font);
+        QTextOption titleTextOption;
+        QString text = "DBUS";
+        titleTextOption.setAlignment(Qt::AlignCenter);
+        titleTextOption.setWrapMode(QTextOption::WrapAnywhere);
+        painter.drawText(appTypeRect, text, titleTextOption);
+    }
+
+
 
     // 绘制文字部分
     painter.setPen(Qt::black);
@@ -174,8 +198,8 @@ void FastAppItem::paintEvent(QPaintEvent *event) {
     font.setPixelSize(12);
     painter.setFont(font);
     QTextOption titleTextOption;
-    QString text = "腾讯QQ";
-    QRect titleRect = rect().marginsRemoved(QMargins(5,70,5,5));
+    QString text = "打开系统代理";
+    QRect titleRect = rect().marginsRemoved(QMargins(5,80,5,5));
     titleTextOption.setAlignment(Qt::AlignCenter);
     titleTextOption.setWrapMode(QTextOption::WrapAnywhere);
     painter.drawText(titleRect, text, titleTextOption);
