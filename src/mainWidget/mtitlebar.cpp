@@ -46,14 +46,18 @@ MTitleBar::MTitleBar(QWidget *parent) : QWidget(parent)
     operatorLayout->addWidget(minBtn);
     operatorLayout->addWidget(closeBtn);
 
+    auto *iconLayout = new QHBoxLayout();
+    iconLayout->addWidget(iconLabel);
+    iconLayout->addStretch();
+
     titleLabel->setAlignment(Qt::AlignCenter);
     iconLabel->setAlignment(Qt::AlignCenter);
 
-    mainLayout->addWidget(iconLabel, 2);
-    mainLayout->addStretch(2);
-    mainLayout->addWidget(titleLabel, 2);
-    mainLayout->addStretch(2);
-    mainLayout->addLayout(operatorLayout, 2);
+    mainLayout->addLayout(iconLayout);
+    mainLayout->addStretch();
+    mainLayout->addWidget(titleLabel);
+    mainLayout->addStretch();
+    mainLayout->addLayout(operatorLayout);
 
     setAttribute(Qt::WA_TranslucentBackground);
 //    setAutoFillBackground(true);

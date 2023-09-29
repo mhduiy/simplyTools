@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent)
     mainWindowLayout->addWidget(main);
     mainWindowLayout->setContentsMargins(15,3,15,3);
     sidebar->raise();  // 控件置顶
-    setMaskAlpha(220);
+    setMaskAlpha(150);
 }
 
 void MainWindow::showEvent(QShowEvent *event) {
