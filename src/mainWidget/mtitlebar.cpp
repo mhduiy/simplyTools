@@ -7,6 +7,7 @@ MTitleBar::MTitleBar(QWidget *parent) : QWidget(parent)
 {
     auto *mainLayout = new QHBoxLayout(this);
     mainLayout->setAlignment(Qt::AlignJustify);
+    mainLayout->setMargin(0);
 
     iconLabel = new QLabel("图标");
     titleLabel = new QLabel("title");
@@ -42,6 +43,7 @@ MTitleBar::MTitleBar(QWidget *parent) : QWidget(parent)
     closeBtn->setToolTip("关掉这个窗口");
 
     auto *operatorLayout = new QHBoxLayout();
+    operatorLayout->addStretch();
     operatorLayout->addWidget(fixBtn);
     operatorLayout->addWidget(minBtn);
     operatorLayout->addWidget(closeBtn);
@@ -53,18 +55,16 @@ MTitleBar::MTitleBar(QWidget *parent) : QWidget(parent)
     titleLabel->setAlignment(Qt::AlignCenter);
     iconLabel->setAlignment(Qt::AlignCenter);
 
-    mainLayout->addLayout(iconLayout);
-    mainLayout->addStretch();
-    mainLayout->addWidget(titleLabel);
-    mainLayout->addStretch();
-    mainLayout->addLayout(operatorLayout);
+    titleLabel->setAlignment(Qt::AlignHCenter);
+
+    mainLayout->addLayout(iconLayout, 1);
+    mainLayout->addStretch(1);
+    mainLayout->addWidget(titleLabel, 1, Qt::AlignHCenter);
+    mainLayout->addStretch(1);
+    mainLayout->addLayout(operatorLayout, 1);
 
     setAttribute(Qt::WA_TranslucentBackground);
-//    setAutoFillBackground(true);
-
-//    setStyleSheet(" MTitleBar{ background-color: #ffffff; } ");
-
-    this->setFixedHeight(45);
+    this->setFixedHeight(30);
 
     connect(fixBtn, &QPushButton::clicked, this, &MTitleBar::fixWindow);
     connect(minBtn, &QPushButton::clicked, this, &MTitleBar::minWindow);

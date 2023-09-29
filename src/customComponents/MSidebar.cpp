@@ -10,10 +10,8 @@
 
 const int DEFAULTWIDTH = 180;
 
-MSidebar::MSidebar(QWidget *parent) : DBlurEffectWidget(parent) {
+MSidebar::MSidebar(QWidget *parent) : QWidget(parent) {
     initUI();
-    setMaskAlpha(100);
-//    setWindowOpacity(20);
 }
 
 void MSidebar::initUI() {
@@ -84,7 +82,7 @@ void MSidebar::foldPage(bool toFolded) {
 }
 
 void MSidebar::showEvent(QShowEvent *event) {
-    Dtk::Widget::DBlurEffectWidget::showEvent(event);
+    QWidget::showEvent(event);
     if (isFirstShow) {
         foldBtn->move(this->pos().x() + this->width() - foldBtn->width(),
                       (this->pos().y() + this->height() - foldBtn->height()) / 2);
@@ -100,7 +98,7 @@ void MSidebar::setCurrentIndex(int index) {
 }
 
 void MSidebar::resizeEvent(QResizeEvent *event) {
-    Dtk::Widget::DBlurEffectWidget::resizeEvent(event);
+    QWidget::resizeEvent(event);
     foldBtn->move(this->pos().x() + this->width() - foldBtn->width(), (this->pos().y() + this->height() - foldBtn->height()) / 2 );
 }
 

@@ -15,7 +15,7 @@
 
 DWIDGET_USE_NAMESPACE
 
-class MSidebar : public DBlurEffectWidget{
+class MSidebar : public QWidget{
 Q_OBJECT
 public:
     explicit MSidebar(QWidget *parent = nullptr);

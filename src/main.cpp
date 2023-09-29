@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     globalSetting::getInstance(&a); // 创建设置类对象
 
     MainWindow w;
-    w.resize(500,450);
+    w.resize(650,500);
 
     // 移动到中间位置
     QDesktopWidget *desktop=QApplication::desktop();
