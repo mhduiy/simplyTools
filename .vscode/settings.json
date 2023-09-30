@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "qwidget": "cpp",
+        "qbrush": "cpp"
+    }
+}

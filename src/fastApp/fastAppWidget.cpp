@@ -7,6 +7,7 @@
 #include <dsuggestbutton.h>
 #include <qpushbutton.h>
 #include "FastAppItem.h"
+#include "customComponents/MTabSwitchButton.h"
 
 FastAppWidget::FastAppWidget(QWidget *parent)
 :QWidget(parent)
@@ -24,7 +25,27 @@ FastAppWidget::FastAppWidget(QWidget *parent)
         m_mainWidget->addItem(item);
     }
 
+    /*******test*******/
+    auto tabSwitchBtn = new MTabSwitchButton();
+
+    tabSwitchBtn->addItem("启动App");
+    tabSwitchBtn->addItem("执行命令");
+    tabSwitchBtn->addItem("运行DBUS");
+    tabSwitchBtn->addItem("测试1");
+    tabSwitchBtn->addItem("测试2");
+    QHBoxLayout *ll = new QHBoxLayout();
+    ll->addWidget(tabSwitchBtn);
+    ll->setAlignment(Qt::AlignHCenter);
+    mainLayout->addLayout(ll);
+
+    connect(tabSwitchBtn, QOverload<int, int>::of(&MTabSwitchButton::currentIndexChanged), this, [](int preIndex, int curIndex){
+        qWarning() << "切换tab" << preIndex << "->" << curIndex;
+    });
+    /*******test*******/
+
     mainLayout->addWidget(m_mainWidget);
+
+
 
     // mainLayout->addLayout(main1);
     // mainLayout->addLayout(main2);

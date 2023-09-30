@@ -150,15 +150,15 @@ void FastAppItem::paintEvent(QPaintEvent *event) {
     // 绘制背景
 
     if(m_isPress) {
-        painter.setBrush(QColor::fromRgb(150, 150, 150));
+        painter.setBrush(QColor::fromRgb(150, 150, 150, 180));
         painter.setPen(Qt::darkGray);
     }
     else if(m_isHover) {
-        painter.setBrush(QColor::fromRgb(190, 190, 190));
+        painter.setBrush(QColor::fromRgb(190, 190, 190, 180));
         painter.setPen(Qt::NoPen);
     }
     else {
-        painter.setBrush(QColor::fromRgb(220, 220, 220));
+        painter.setBrush(QColor::fromRgb(220, 220, 220, 180));
         painter.setPen(Qt::NoPen);
     }
     painter.drawRoundedRect(rect().marginsRemoved(QMargins(5, 5, 5, 5)), 10, 10);
