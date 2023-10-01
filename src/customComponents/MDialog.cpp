@@ -10,7 +10,7 @@ MDialog::MDialog(QWidget *parent) : QDialog(parent){
     initUI();
 }
 void MDialog::initUI() {
-    auto *layout = new QVBoxLayout(this);
+    m_vLayout = new QVBoxLayout(this);
     auto *btnLayout = new QHBoxLayout();
     mainLayout = new QGridLayout();
 
@@ -20,8 +20,8 @@ void MDialog::initUI() {
     btnLayout->addWidget(cancelBtn);
     btnLayout->addWidget(confirmBtn);
 
-    layout->addLayout(mainLayout);
-    layout->addLayout(btnLayout);
+    m_vLayout->addLayout(mainLayout);
+    m_vLayout->addLayout(btnLayout);
 
     setMinimumWidth(300);
 
@@ -100,6 +100,11 @@ void MDialog::on_confirmBtn_clicked() {
 
 void MDialog::on_cancelBtn_clicked() {
     this->reject();
+}
+
+void MDialog::addWidget(QWidget *widget)
+{
+    m_vLayout->insertWidget(0, widget);
 }
 
 QWidget *MDialog::findMainWindow(QObject *obj) {

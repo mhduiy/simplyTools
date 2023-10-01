@@ -11,7 +11,8 @@ MLineEdit::MLineEdit(QWidget *parent)
 ,m_placeholderFontSizeAni(new QPropertyAnimation(this, "m_placeholderFontSize", this))
 ,m_backgroundColorAni(new QPropertyAnimation(this, "m_backGroundColor", this))
 {
-    setFixedSize(200, 50);
+    setFixedHeight(50);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     initUI();
 }
 
@@ -159,6 +160,11 @@ bool MLineEdit::eventFilter(QObject *obj, QEvent *event)
         QApplication::sendEvent(this, event);
     }
     return QWidget::eventFilter(obj, event);
+}
+void MLineEdit::resizeEvent(QResizeEvent *event)
+{
+    setTipText(m_placeholderText);
+    return QWidget::resizeEvent(event);
 }
 
 double MLineEdit::placeHolderFontSize()

@@ -10,7 +10,10 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QLayout>
+#include <DDialog>
 #include "customComponents/MButton.h"
+
+DWIDGET_USE_NAMESPACE
 
 class MDialog : public QDialog{
     Q_OBJECT
@@ -38,6 +41,11 @@ public:
      * @return 获取指定label文字的输入框数据
      */
     QString getItemInfo(const QString& label);
+    /**
+     * 添加一个控件到dialog中
+     * @param widget 添加的小控件
+    */
+    void addWidget(QWidget *widget = nullptr);
 
     void setLabelById(const QString& label, int id = 0);
     void setDefaultStrById(const QString& defaultStr, int id = 0);
@@ -58,6 +66,8 @@ private:
 
     QWidget *mainWindow = nullptr;
     QGridLayout *mainLayout = nullptr;
+
+    QVBoxLayout *m_vLayout = nullptr;
 
     MButton *cancelBtn = nullptr;
     MButton *confirmBtn = nullptr;

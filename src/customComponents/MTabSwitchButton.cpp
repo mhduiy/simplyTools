@@ -17,8 +17,8 @@ void MTabSwitchButton::initUI()
 {
     setFixedHeight(40);
 
-    m_aniSliderPos->setDuration(300);
-    m_aniSliderPos->setEasingCurve(QEasingCurve::OutCubic);
+    m_aniSliderPos->setDuration(400);
+    m_aniSliderPos->setEasingCurve(QEasingCurve::InOutCirc);
 }
 
 void MTabSwitchButton::paintEvent(QPaintEvent *event)

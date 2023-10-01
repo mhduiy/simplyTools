@@ -12,6 +12,7 @@
 #include <dsuggestbutton.h>
 #include <DFloatingButton>
 #include "FlowLayoutWidget.h"
+#include "FastAppWoker.h"
 
 class FastAppWidget : public QWidget{
     Q_OBJECT
@@ -31,6 +32,8 @@ private:
     DFloatingButton *m_editFastAppBtn;
     DFloatingButton *m_addFastAppBtn;
     FlowLayoutWidget *m_mainWidget = nullptr;
+
+    FastAppWorker worker;
 };
 
 

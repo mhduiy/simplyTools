@@ -28,6 +28,7 @@ protected:
     bool eventFilter(QObject *obj, QEvent *event) override;
     void focusInEvent(QFocusEvent *event) override;
     void focusOutEvent(QFocusEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     void initUI();
