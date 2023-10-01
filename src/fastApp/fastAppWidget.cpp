@@ -8,6 +8,7 @@
 #include <qpushbutton.h>
 #include "FastAppItem.h"
 #include "customComponents/MTabSwitchButton.h"
+#include "customComponents/MLineEdit.h"
 
 FastAppWidget::FastAppWidget(QWidget *parent)
 :QWidget(parent)
@@ -36,7 +37,22 @@ FastAppWidget::FastAppWidget(QWidget *parent)
     QHBoxLayout *ll = new QHBoxLayout();
     ll->addWidget(tabSwitchBtn);
     ll->setAlignment(Qt::AlignHCenter);
+
     mainLayout->addLayout(ll);
+    auto *ld1 = new MLineEdit();
+    auto *ld2 = new MLineEdit();
+    auto *ld3 = new MLineEdit();
+    auto *ld4 = new MLineEdit();
+
+    ld1->setTipText("用户名");
+    ld2->setTipText("密码");
+    ld3->setTipText("家庭住址");
+    ld4->setTipText("电话号码");
+    
+    mainLayout->addWidget(ld1);
+    mainLayout->addWidget(ld2);
+    mainLayout->addWidget(ld3);
+    mainLayout->addWidget(ld4);
 
     connect(tabSwitchBtn, QOverload<int, int>::of(&MTabSwitchButton::currentIndexChanged), this, [](int preIndex, int curIndex){
         qWarning() << "切换tab" << preIndex << "->" << curIndex;

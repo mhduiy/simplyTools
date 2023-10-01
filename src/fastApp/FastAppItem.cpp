@@ -190,8 +190,6 @@ void FastAppItem::paintEvent(QPaintEvent *event) {
         painter.drawText(appTypeRect, text, titleTextOption);
     }
 
-
-
     // 绘制文字部分
     painter.setPen(Qt::black);
     QFont font;

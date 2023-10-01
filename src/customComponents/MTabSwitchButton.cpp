@@ -56,7 +56,7 @@ void MTabSwitchButton::paintBackground()
     painter.setPen(Qt::gray);
     painter.setBrush(QColor(255, 255, 255, 120));
 
-    painter.drawRoundedRect(rect(), 10, 10);
+    painter.drawRoundedRect(rect().marginsRemoved(QMargins(1, 0, 1, 0)), 10, 10);
 }
 
 void MTabSwitchButton::paintText()
