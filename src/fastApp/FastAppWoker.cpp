@@ -2,7 +2,7 @@
 
 FastAppWorker::FastAppWorker(QObject *parent)
 :QObject(parent)
-,m_dialog(new MDialog())
+,m_dialog(new MDialog(qobject_cast<QWidget*>(parent)))
 ,m_dialogWidget(new QWidget())
 ,m_tabSwitchButton(new MTabSwitchButton())
 ,m_appIcon(new QLabel())

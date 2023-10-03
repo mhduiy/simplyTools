@@ -11,6 +11,9 @@
         "string_view": "cpp",
         "initializer_list": "cpp",
         "qinputmethodevent": "cpp",
-        "new": "cpp"
+        "new": "cpp",
+        "dblureffectwidget": "cpp",
+        "qlabel": "cpp",
+        "qlayout": "cpp"
     }
 }

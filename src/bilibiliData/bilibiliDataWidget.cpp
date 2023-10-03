@@ -128,9 +128,9 @@ void BilibiliDataWidget::updateBtnClicked() {
 void BilibiliDataWidget::setInfoBtnClicked() {
     if(setInfoDialog == nullptr) {
         setInfoDialog = new MDialog(this);
-        setInfoDialog->addItem("sessdata:", "", "在浏览器cookies中获取");
-        setInfoDialog->addItem("bili_jct:", "", "在浏览器cookies中获取");
-        setInfoDialog->addItem("uid:", "", "用户uid");
+        setInfoDialog->addItem("sessdata");
+        setInfoDialog->addItem("bili_jct");
+        setInfoDialog->addItem("uid");
     }
     auto globalSettingInstance = globalSetting::getInstance();
     if(globalSettingInstance) {

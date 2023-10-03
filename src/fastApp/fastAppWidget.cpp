@@ -14,6 +14,7 @@ FastAppWidget::FastAppWidget(QWidget *parent)
 :QWidget(parent)
 ,m_editFastAppBtn(new DFloatingButton(DStyle::SP_EditElement, this))
 ,m_addFastAppBtn(new DFloatingButton(DStyle::SP_IncreaseElement, this))
+,m_worker(new FastAppWorker(this))
 {
     auto *mainLayout = new QVBoxLayout(this);
     m_mainWidget = new FlowLayoutWidget(this);
@@ -96,5 +97,5 @@ void FastAppWidget::onEditFastAppBtnClicked()
 
 void FastAppWidget::onAddFastAppBtnClicked()
 {
-    worker.showDialog();
+    m_worker->showDialog();
 }

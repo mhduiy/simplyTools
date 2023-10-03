@@ -33,7 +33,7 @@ private:
     DFloatingButton *m_addFastAppBtn;
     FlowLayoutWidget *m_mainWidget = nullptr;
 
-    FastAppWorker worker;
+    FastAppWorker *m_worker = nullptr;
 };
 
 

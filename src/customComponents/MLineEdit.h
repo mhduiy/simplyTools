@@ -16,6 +16,7 @@ class MLineEdit : public QWidget {
     Q_PROPERTY(QColor m_backGroundColor READ backGroundColor WRITE setBackGroundColor)
 public:
     explicit MLineEdit(QWidget* parent = nullptr);
+    void setText(const QString &text);
     QString text() const;
     void setTipText(const QString& text);
 
@@ -32,6 +33,9 @@ protected:
 
 private:
     void initUI();
+
+    void updateLayout();
+    void updateData();
 
     double placeHolderFontSize();
     void setplaceHolderFontSize(double size);

@@ -126,8 +126,8 @@ void simplyTranslateWidget::on_btn_paste_clicked() //粘贴
 void simplyTranslateWidget::on_btn_setUserInfo_clicked() {
     if(setInfoDialog == nullptr) {
         setInfoDialog = new MDialog(this);
-        setInfoDialog->addItem("appId:", "", "百度翻译API的appId");
-        setInfoDialog->addItem("appKey:", "", "百度翻译API的密钥");
+        setInfoDialog->addItem("百度翻译API的appId");
+        setInfoDialog->addItem("百度翻译API的密钥");
     }
     auto globalSettingInstance = globalSetting::getInstance();
     if(globalSettingInstance) {

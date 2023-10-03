@@ -37,6 +37,8 @@ void MLineEdit::initUI()
 
     m_backgroundColorAni->setStartValue(m_isNoInputBackColor);
     m_backgroundColorAni->setEndValue(m_isInputBackColor);
+    m_placeholderFontSizeAni->setStartValue(m_placeholderFontSize);
+    m_placeholderFontSizeAni->setEndValue(m_foldPlaceholderFontSize);
 
     m_lineEdit->hide();
 
@@ -45,6 +47,7 @@ void MLineEdit::initUI()
 
 void MLineEdit::showEvent(QShowEvent *event)
 {
+    updateLayout();
     QWidget::showEvent(event);
 }
 
@@ -77,7 +80,9 @@ void MLineEdit::paintEvent(QPaintEvent *event)
     } else {
         painter.setPen(Qt::darkGray);
     }
-    painter.setFont(m_placeholderFont);
+    QFont font;
+    font.setPointSizeF(m_placeholderFontSize);
+    painter.setFont(font);
     QTextOption placeholderTextOption;
     placeholderTextOption.setAlignment(Qt::AlignCenter);
 
@@ -89,20 +94,7 @@ void MLineEdit::paintEvent(QPaintEvent *event)
 void MLineEdit::setTipText(const QString& text)
 {
     m_placeholderText = text;
-    QFontMetrics fontMetrics(m_placeholderFont);
-    QSize textSize = fontMetrics.size(0, " " + text + " ");  // 获取文本的大小
-    m_placeholderRect = QRect(QPoint(leftPadding, (geometry().height() - textSize.height()) / 2), textSize);
-
-    QFontMetrics foldFontMetrics(m_foldPlaceholderFont);
-    QSize foldTextSize = foldFontMetrics.size(0, " " + text + " ");  // 获取文本的大小
-    m_foldPlaceholderRect = QRect(QPoint(width() - foldTextSize.width(), (topMargin * 2 - foldTextSize.height()) / 2 + 2), foldTextSize);
-
-    m_placeholderRectAni->setStartValue(m_placeholderRect);
-    m_placeholderRectAni->setEndValue(m_foldPlaceholderRect);
-
-    m_placeholderFontSizeAni->setStartValue(m_placeholderFontSize);
-    m_placeholderFontSizeAni->setEndValue(m_foldPlaceholderFontSize);
-    update();
+    updateLayout();
 }
 
 QString MLineEdit::text() const
@@ -110,9 +102,14 @@ QString MLineEdit::text() const
     return m_lineEdit->text();
 }
 
+void MLineEdit::setText(const QString &text)
+{
+    m_lineEdit->setText(text);
+    updateLayout();
+}
+
 void MLineEdit::mouseReleaseEvent(QMouseEvent *event)
 {
-    qWarning() << "按下";
     isInput = true;
     startplaceholderAni();
     m_lineEdit->show();
@@ -135,13 +132,11 @@ void MLineEdit::leaveEvent(QEvent *event)
 
 void MLineEdit::focusInEvent(QFocusEvent *event)
 {
-    qWarning() << "yes";
     QWidget::focusInEvent(event);
 }
 
 void MLineEdit::focusOutEvent(QFocusEvent *event)
 {
-    qWarning() << "no";
     QWidget::focusOutEvent(event);
 }
 
@@ -163,7 +158,8 @@ bool MLineEdit::eventFilter(QObject *obj, QEvent *event)
 }
 void MLineEdit::resizeEvent(QResizeEvent *event)
 {
-    setTipText(m_placeholderText);
+    setTipText(m_placeholderText);  // 刷新以下
+    updateLayout();
     return QWidget::resizeEvent(event);
 }
 
@@ -174,7 +170,6 @@ double MLineEdit::placeHolderFontSize()
 void MLineEdit::setplaceHolderFontSize(double size)
 {
     m_placeholderFontSize = size;
-    m_placeholderFont.setPointSizeF(size);
     update();
 }
 
@@ -200,7 +195,6 @@ void MLineEdit::setBackGroundColor(const QColor &color)
 
 void MLineEdit::startplaceholderAni()
 {
-    qWarning() << lastIsInput << isInput;
     if(isInput == lastIsInput) {
         return;
     }
@@ -232,4 +226,36 @@ void MLineEdit::startplaceholderAni()
         m_placeholderFontSizeAni->start();
     }
     m_backgroundColorAni->start();
+}
+
+void MLineEdit::updateLayout()
+{
+    updateData();
+    // 如果有内容
+    if (!m_lineEdit->text().isEmpty()) {
+        m_lineEdit->show();
+        setplaceHolderFontSize(m_foldPlaceholderFontSize);
+        setPlaceholderRect(m_placeholderRectAni->endValue().toRectF());
+    }
+    else {
+        if(isInput) {
+            setPlaceholderRect(m_placeholderRectAni->endValue().toRectF());
+        }
+    }
+}
+
+void MLineEdit::updateData()
+{
+    QFontMetrics fontMetrics(m_placeholderFont);
+    QSize textSize = fontMetrics.size(0, " " + m_placeholderText + " ");  // 获取文本的大小
+    m_placeholderRect = QRect(QPoint(leftPadding, (geometry().height() - textSize.height()) / 2), textSize);
+
+    QFontMetrics foldFontMetrics(m_foldPlaceholderFont);
+    QSize foldTextSize = foldFontMetrics.size(0, " " + m_placeholderText + " ");  // 获取文本的大小
+    m_foldPlaceholderRect = QRect(QPoint(width() - foldTextSize.width(), (topMargin * 2 - foldTextSize.height()) / 2 + 2), foldTextSize);
+
+    qWarning() << m_placeholderRect << geometry().height() << textSize.height();
+
+    m_placeholderRectAni->setStartValue(m_placeholderRect);
+    m_placeholderRectAni->setEndValue(m_foldPlaceholderRect);
 }

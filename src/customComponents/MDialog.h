@@ -11,11 +11,14 @@
 #include <QLineEdit>
 #include <QLayout>
 #include <DDialog>
+#include <DBlurEffectWidget>
+#include <QEventLoop>
+#include "MLineEdit.h"
 #include "customComponents/MButton.h"
 
 DWIDGET_USE_NAMESPACE
 
-class MDialog : public QDialog{
+class MDialog : public DBlurEffectWidget{
     Q_OBJECT
 public:
     explicit MDialog(QWidget* parent = nullptr);
@@ -25,10 +28,9 @@ public:
      *
      * @param label  标签
      * @param defaultStr  输入框默认值
-     * @param tipStr  输入框提示
      * @return 输入框id
      */
-    int addItem(const QString &label, const QString &defaultStr = "", const QString &tipStr = "");
+    int addItem(const QString &label, const QString &defaultStr = "");
     /**
      *
      * @param id
@@ -49,25 +51,27 @@ public:
 
     void setLabelById(const QString& label, int id = 0);
     void setDefaultStrById(const QString& defaultStr, int id = 0);
-    void setTipById(const QString& tipStr, int id = 0);
 
     void on_confirmBtn_clicked();
     void on_cancelBtn_clicked();
-    int exec()override;
+    int exec();
 
 protected:
     void showEvent(QShowEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
 private:
-    QVector<QLabel*> labelVector;
-    QVector<QLineEdit*> lineEditVector;
+    QVector<MLineEdit*> lineEditVector;
 
     QWidget* findMainWindow(QObject *obj);
 
     QWidget *mainWindow = nullptr;
-    QGridLayout *mainLayout = nullptr;
+    QVBoxLayout *mainLayout = nullptr;
 
     QVBoxLayout *m_vLayout = nullptr;
+
+    QEventLoop eventLoop;
+
+    int m_exitStatCode = 0;
 
     MButton *cancelBtn = nullptr;
     MButton *confirmBtn = nullptr;

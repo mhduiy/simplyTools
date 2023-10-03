@@ -18,7 +18,7 @@ void MTabSwitchButton::initUI()
     setFixedHeight(40);
 
     m_aniSliderPos->setDuration(400);
-    m_aniSliderPos->setEasingCurve(QEasingCurve::InOutCirc);
+    m_aniSliderPos->setEasingCurve(QEasingCurve::OutQuart);
 }
 
 void MTabSwitchButton::paintEvent(QPaintEvent *event)
@@ -98,11 +98,6 @@ void MTabSwitchButton::paintSlider()
 
     painter.setPen(Qt::NoPen);
 
-    // 画当前选中的
-    if (m_checkedIndex != -1 && m_checkedIndex < m_rects.size()) {
-        painter.setBrush(m_checkBrush);
-        painter.drawRoundedRect(QRectF(m_curSliderPoint, m_silderSize), 10, 10);
-    }
     // 画当前Press的
     if (m_pressIndex != -1 && m_checkedIndex < m_rects.size() && m_pressIndex != m_checkedIndex) {
         painter.setBrush(m_pressBrush);
@@ -112,6 +107,11 @@ void MTabSwitchButton::paintSlider()
     if (m_hoverIndex != -1 && m_hoverIndex < m_rects.size() && m_hoverIndex != m_checkedIndex && m_hoverIndex != m_pressIndex) {
         painter.setBrush(m_hoverBrush);
         painter.drawRoundedRect(m_rects.value(m_hoverIndex), 10, 10);
+    }
+    // 画当前选中的
+    if (m_checkedIndex != -1 && m_checkedIndex < m_rects.size()) {
+        painter.setBrush(m_checkBrush);
+        painter.drawRoundedRect(QRectF(m_curSliderPoint, m_silderSize), 10, 10);
     }
 }
 
