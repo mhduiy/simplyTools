@@ -97,6 +97,7 @@ void simplyTranslateWidget::initUI() {
     connect(translatetool,&TranslateTool::disMsgAppend,this,[=](QString res){
         mNotificationBox->sendMsg(res, QIcon(":/errorIcon.png"));
         tranToBox->setTitle("翻译结果");
+        qWarning() << "翻译错误: " << res;
     });
     qDebug() << QSslSocket::supportsSsl()
              << QSslSocket::sslLibraryBuildVersionString()

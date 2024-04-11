@@ -5,6 +5,7 @@
 #include <QLoggingCategory>
 #include <QStyleFactory>
 #include "global/globalSetting.h"
+#include "simplyTranslate/TranslateTool.h"
 
 int main(int argc, char *argv[])
 {
@@ -18,6 +19,27 @@ int main(int argc, char *argv[])
 
     globalSetting::getInstance(&a); // 创建设置类对象
 
+    if (argc > 1) {
+        QString from = "zh";
+        QString to = "en";
+        QString src = "";
+        TranslateTool tool;
+        if (argc == 2) {
+            src = argv[1];
+        } else if (argc == 4) {
+            from = argv[1];
+            to = argv[2];
+            src = argv[3];
+        } else {
+            qWarning("参数数量错误");
+            exit(EXIT_FAILURE);
+        }
+        QTimer::singleShot(100, [&](){
+            tool.TranslateFromBaidu(src, from, to, true);
+        });
+        return a.exec();
+    }
+    
     MainWindow w;
     w.resize(700,500);
 

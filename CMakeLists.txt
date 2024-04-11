@@ -42,3 +42,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         ${DtkCore_LIBRARIES}
         ${DtkWidget_LIBRARIES}
         ) # 链接库
+
+install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)

@@ -10,7 +10,7 @@ Q_OBJECT
 public:
     explicit TranslateTool(QObject *parent = nullptr);
 
-    void TranslateFromBaidu(QString src, QString from, QString to);
+    void TranslateFromBaidu(QString src, QString from, QString to, bool finishExit = false);
 
 
 signals:
@@ -20,6 +20,8 @@ signals:
 
 private:
     QNetworkAccessManager *m_networkAccessManager;
+
+    QString getError(const int code);
 
 public slots:
 };
