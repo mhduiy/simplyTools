@@ -4,16 +4,16 @@
 
 #include "fastAppWidget.h"
 #include <QLayout>
-#include <dsuggestbutton.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include "FastAppItem.h"
 #include "customComponents/MTabSwitchButton.h"
-#include "customComponents/MLineEdit.h"
+#include "fastApp/FastAppWoker.h"
+#include <QDebug>
 
 FastAppWidget::FastAppWidget(QWidget *parent)
 :QWidget(parent)
-,m_editFastAppBtn(new DFloatingButton(DStyle::SP_EditElement, this))
-,m_addFastAppBtn(new DFloatingButton(DStyle::SP_IncreaseElement, this))
+,m_editFastAppBtn(new QPushButton())
+,m_addFastAppBtn(new QPushButton())
 ,m_worker(new FastAppWorker(this))
 {
     auto *mainLayout = new QVBoxLayout(this);
@@ -50,10 +50,6 @@ FastAppWidget::FastAppWidget(QWidget *parent)
 
     m_editFastAppBtn->raise();
     m_addFastAppBtn->raise();
-
-    connect(m_editFastAppBtn, &DFloatingButton::clicked, this, &FastAppWidget::onEditFastAppBtnClicked);
-    connect(m_addFastAppBtn, &DFloatingButton::clicked, this, &FastAppWidget::onAddFastAppBtnClicked);
-
 }
 
 
@@ -83,14 +79,12 @@ void FastAppWidget::onEditFastAppBtnClicked()
         for(auto item : m_fastAppItems) {
             item->hideOperatorBtn();
         }
-        m_editFastAppBtn->setIcon(DStyle::StandardPixmap::SP_EditElement);
         isShow = false;
     }
     else {
         for(auto item : m_fastAppItems) {
             item->showOperatorBtn();
         }
-        m_editFastAppBtn->setIcon(DStyle::StandardPixmap::SP_MarkElement);
         isShow = true;
     }
 }

@@ -3,9 +3,10 @@
 #include <QStatusBar>
 #include <QBitmap>
 #include <QPainter>
+#include <qwidget.h>
 
 MainWindow::MainWindow(QWidget *parent)
-    : DBlurEffectWidget(parent)
+    : QWidget(parent)
 {
     setWindowFlags(this->windowFlags() | Qt::WindowStaysOnTopHint);    //设置窗口置顶
     setWindowFlags(this->windowFlags() | Qt::FramelessWindowHint);
@@ -44,15 +45,14 @@ MainWindow::MainWindow(QWidget *parent)
     mainWindowLayout->addWidget(main);
     mainWindowLayout->setContentsMargins(15,3,15,3);
     sidebar->raise();  // 控件置顶
-    setMaskAlpha(150);
 }
 
 void MainWindow::showEvent(QShowEvent *event) {
-    Dtk::Widget::DBlurEffectWidget::showEvent(event);
+    QWidget::showEvent(event);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event) {
-    Dtk::Widget::DBlurEffectWidget::resizeEvent(event);
+    QWidget::resizeEvent(event);
     sidebar->setFixedHeight(this->geometry().height());
 }
 
@@ -61,7 +61,7 @@ void MainWindow::paintEvent(QPaintEvent *event) {
     opt.init(this);
     QPainter p(this);
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-    Dtk::Widget::DBlurEffectWidget::paintEvent(event);
+    QWidget::paintEvent(event);
 }
 
 MainWindow::~MainWindow()

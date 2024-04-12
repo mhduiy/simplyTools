@@ -164,11 +164,7 @@ void simplyTranslateWidget::on_btn_tran_clicked()  //翻译
         mNotificationBox->sendMsg("请输入需要翻译的内容", MSG_Warning);
         return;
     }
-    QNetworkConfigurationManager mgr;
-    if(!mgr.isOnline()) {
-        mNotificationBox->sendMsg("网络似乎未连接...", MSG_Error);
-        return;
-    }
+    
     tranToBox->setTitle("翻译中...");
     translatetool->TranslateFromBaidu(src,srcTypeMap.value(srcTypeBox->currentIndex()).second
                                       ,tarTypeMap.value(tarTypeBox->currentIndex()).second);

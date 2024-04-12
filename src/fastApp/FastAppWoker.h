@@ -2,13 +2,10 @@
 #define FASTAPPWOKER_H
 
 #include <QObject>
-#include <dtkwidget_global.h>
 #include <QStackedWidget>
 #include "customComponents/MDialog.h"
 #include "customComponents/MLineEdit.h"
 #include "customComponents/MTabSwitchButton.h"
-
-DWIDGET_USE_NAMESPACE
 
 enum SettingType {DBUS, APP};
 

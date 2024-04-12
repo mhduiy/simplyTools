@@ -6,13 +6,8 @@
 #define SIMPLYTOOLS_FASTAPPITEM_H
 
 #include <QWidget>
-#include <DFloatingButton>
-#include <qicon.h>
+#include <QPushButton>
 #include <QPropertyAnimation>
-#include <qpropertyanimation.h>
-#include <qvariantanimation.h>
-
-DWIDGET_USE_NAMESPACE
 
 class FastAppItem : public QWidget{
     Q_OBJECT
@@ -35,8 +30,8 @@ private:
     void initUI();
     void initData();
     void initConnect();
-    DFloatingButton *m_deleteBtn = nullptr;
-    DFloatingButton *m_editBtn = nullptr;
+    QPushButton *m_deleteBtn = nullptr;
+    QPushButton *m_editBtn = nullptr;
     
     bool m_isHover;
     bool m_isPress;

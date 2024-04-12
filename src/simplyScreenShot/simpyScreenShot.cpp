@@ -18,6 +18,7 @@
 #include <QBuffer>
 #include <QDir>
 #include <QClipboard>
+#include <qlabel.h>
 
 SimpyScreenShot::SimpyScreenShot(QWidget *parent) : QWidget(parent){
     initUI();
@@ -26,7 +27,7 @@ SimpyScreenShot::SimpyScreenShot(QWidget *parent) : QWidget(parent){
 void SimpyScreenShot::initUI() {
     auto *mainLayout = new QVBoxLayout(this);
 
-    imageDisPlay = new DImageViewer();
+    imageDisPlay = new QLabel();
     copyImageBtn = new MButton("复制到剪切板");
     saveImageBtn = new MButton("保存");
     startColorPicker = new MButton("屏幕取色");
@@ -82,7 +83,7 @@ void SimpyScreenShot::screenShotOperator() {
     QScreen *screen = QGuiApplication::primaryScreen();
     pixmap = screen->grabWindow(0);
     imageDisPlay->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);  // 设置大小策略
-    imageDisPlay->setImage(pixmap.toImage());
+    imageDisPlay->setPixmap(pixmap);
     mainWindow->show();
 }
 

@@ -2,9 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <DBlurEffectWidget>
 #include <QStackedWidget>
-#include "customComponents/MButton.h"
 #include "customComponents/MSidebar.h"
 #include "simplyTranslate/simplyTranslateWidget.h"
 #include "simplyScreenShot/simpyScreenShot.h"
@@ -12,9 +10,7 @@
 #include "fastApp/fastAppWidget.h"
 #include "mtitlebar.h"
 
-DWIDGET_USE_NAMESPACE
-
-class MainWindow : public DBlurEffectWidget
+class MainWindow : public QWidget
 {
     Q_OBJECT
 

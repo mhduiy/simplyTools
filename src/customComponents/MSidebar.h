@@ -6,14 +6,11 @@
 #define SIMPLYTOOLS_MSIDEBAR_H
 
 #include <QWidget>
-#include <DBlurEffectWidget>
 #include <QListWidget>
 #include "MButton.h"
 #include <QTimer>
 #include <QMouseEvent>
 #include <QPropertyAnimation>
-
-DWIDGET_USE_NAMESPACE
 
 class MSidebar : public QWidget{
 Q_OBJECT

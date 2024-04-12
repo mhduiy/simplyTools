@@ -3,32 +3,8 @@
 //
 
 #include "FastAppItem.h"
-#include <QPalette>
-#include <QLabel>
-#include <QLayout>
 #include <QTimer>
-#include <dfloatingbutton.h>
-#include <dstyle.h>
-#include <qcolor.h>
-#include <qcoreevent.h>
-#include <qeasingcurve.h>
-#include <qevent.h>
-#include <qfont.h>
-#include <qglobal.h>
-#include <qguiapplication.h>
-#include <qimage.h>
-#include <qmargins.h>
-#include <qnamespace.h>
-#include <qpainter.h>
-#include <qpalette.h>
-#include <qpixmap.h>
-#include <qpoint.h>
-#include <qpropertyanimation.h>
-#include <qsize.h>
-#include <qsizepolicy.h>
-#include <qtextoption.h>
-#include <qvariant.h>
-#include <qwidget.h>
+#include <QPainter>
 
 FastAppItem::FastAppItem(QWidget *parent) : 
     QWidget(parent),
@@ -41,7 +17,7 @@ FastAppItem::FastAppItem(QWidget *parent) :
 }
 
 void FastAppItem::initUI() {
-    m_deleteBtn = new DFloatingButton(DStyle::StandardPixmap::SP_ForkElement, this);
+    m_deleteBtn = new QPushButton(this);
     m_deleteBtn->resize(0, 0);
     m_deleteBtn->setIconSize(QSize(18,18));
     m_deleteBtn->setBackgroundRole(QPalette::Button);
@@ -50,7 +26,7 @@ void FastAppItem::initUI() {
     deleteBtnPalette.setColor(QPalette::ButtonText, Qt::white);
     m_deleteBtn->setPalette(deleteBtnPalette);
 
-    m_editBtn = new DFloatingButton(DStyle::StandardPixmap::SP_EditElement, this);
+    m_editBtn = new QPushButton(this);
     m_editBtn->resize(0, 0);
     m_editBtn->setIconSize(QSize(13,13));
     m_editBtn->setBackgroundRole(QPalette::Button);

@@ -8,9 +8,7 @@
 #include "fastApp/FastAppItem.h"
 #include <QWidget>
 #include <QVector>
-#include <DSuggestButton>
-#include <dsuggestbutton.h>
-#include <DFloatingButton>
+#include <QPushButton>
 #include "FlowLayoutWidget.h"
 #include "FastAppWoker.h"
 
@@ -29,8 +27,8 @@ private:
 
 private:
     QVector<FastAppItem*> m_fastAppItems;
-    DFloatingButton *m_editFastAppBtn;
-    DFloatingButton *m_addFastAppBtn;
+    QPushButton *m_editFastAppBtn;
+    QPushButton *m_addFastAppBtn;
     FlowLayoutWidget *m_mainWidget = nullptr;
 
     FastAppWorker *m_worker = nullptr;

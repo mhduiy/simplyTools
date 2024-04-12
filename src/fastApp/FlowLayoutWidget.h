@@ -3,9 +3,7 @@
 
 #include <QWidget>
 #include <QScrollArea>
-#include <dflowlayout.h>
-
-DWIDGET_USE_NAMESPACE
+#include <qboxlayout.h>
 
 class FlowLayoutWidget : public QScrollArea
 {
@@ -20,7 +18,7 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-    DFlowLayout *m_contentLayout = nullptr;
+    QVBoxLayout *m_contentLayout = nullptr;
     QWidget *m_contentWidget = nullptr;
     QWidget *m_mainWidget = nullptr;
     QHBoxLayout *m_mainLayout = nullptr;

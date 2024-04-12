@@ -9,10 +9,9 @@
 #include <QApplication>
 #include <QTimer>
 #include <QDebug>
+#include <qdialog.h>
 
-DWIDGET_USE_NAMESPACE
-
-MDialog::MDialog(QWidget *parent) : DBlurEffectWidget(parent){
+MDialog::MDialog(QWidget *parent) : QDialog(parent){
     initUI();
 }
 void MDialog::initUI() {
@@ -119,7 +118,7 @@ QWidget *MDialog::findMainWindow(QObject *obj) {
 }
 
 void MDialog::showEvent(QShowEvent *event) {
-    DBlurEffectWidget::showEvent(event);
+    QDialog::showEvent(event);
     QDesktopWidget *desktop = QApplication::desktop();
     move((desktop->width() - width()) / 2, (desktop->height() - height()) / 2);
     QWidget::showEvent(event);
@@ -129,11 +128,11 @@ void MDialog::closeEvent(QCloseEvent *event) {
     if(mainWindow != nullptr) {
         mainWindow->setGraphicsEffect(nullptr);
     }
-    DBlurEffectWidget::closeEvent(event);
+    QDialog::closeEvent(event);
 }
 
 int MDialog::exec() {
-    DBlurEffectWidget::show();
+    QDialog::show();
     eventLoop.exec();
     close();
     return m_exitStatCode;

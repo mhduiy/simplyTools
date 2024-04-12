@@ -10,15 +10,12 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QLayout>
-#include <DDialog>
-#include <DBlurEffectWidget>
 #include <QEventLoop>
+#include <qdialog.h>
 #include "MLineEdit.h"
 #include "customComponents/MButton.h"
 
-DWIDGET_USE_NAMESPACE
-
-class MDialog : public DBlurEffectWidget{
+class MDialog : public QDialog{
     Q_OBJECT
 public:
     explicit MDialog(QWidget* parent = nullptr);
